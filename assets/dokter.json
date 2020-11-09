@@ -1,0 +1,41 @@
+{
+    "data" : [
+      {
+        "nama": "Dr..",
+        "spesialis": "eas",
+        "jadwal": [
+          {
+            "hari": "senin",
+            "waktu": "08.00-14.00",
+            "biografi": "asdas",
+            "kredensial": "asdasd",
+            "afliansi_akademik": "asdasda"
+          },
+          {
+            "hari": "selasa",
+            "waktu": "08.14.00"
+          }
+        
+        ]
+      },
+      {
+        "nama": "Dr..",
+        "spesialis": "eas",
+        "jadwal": [
+          {
+            "hari": "senin",
+            "waktu": "08.00-14.00",
+            "biografi": "asdas",
+            "kredensial": "asdasd",
+            "afliansi_akademik": "asdasda"
+          },
+          {
+            "hari": "selasa",
+            "waktu": "08.14.00"
+          }
+        
+        ]
+      }
+      
+    ]
+  }
