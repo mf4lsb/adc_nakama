@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smkdev_nakama/color_palette.dart';
+import 'package:adc_nakama/color_palette.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin{
-
+class _ProfileScreenState extends State<ProfileScreen>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
   int _currentIndex = 0;
 
@@ -76,15 +76,20 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     ),
                     Container(
                       height: 45,
-                      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
                       padding: const EdgeInsets.all(1),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(7), color: greyButtonDoktor,),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(7),
+                        color: greyButtonDoktor,
+                      ),
                       child: Row(children: [
                         Expanded(
                           flex: 5,
                           child: ButtonTheme(
                             height: 40,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
                             child: FlatButton(
                               color: _getBackgroundColor(0),
                               onPressed: () {
@@ -101,7 +106,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           flex: 5,
                           child: ButtonTheme(
                             height: 40,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)),
                             child: FlatButton(
                               color: _getBackgroundColor(1),
                               onPressed: () {
@@ -124,33 +130,46 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                             itemCount: 10,
                             itemBuilder: (context, index) {
                               return Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: blueTitleDoktor.withOpacity(0.1)),
-                                      width: 48,
-                                      height: 48,
-                                    ),
-                                    SizedBox(width: 12,),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Waktunya Kontrol Nih"),
-                                        Text("Ingat Jadwal kontrol rutin mingguan anda dengan dr. Sandy Sucipto hari selasa", overflow: TextOverflow.ellipsis,),
-                                        SizedBox(height: 6,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("2 jam yang lalu"),
-                                            Text("New")
-                                          ],
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                )
-                              );
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            color: blueTitleDoktor
+                                                .withOpacity(0.1)),
+                                        width: 48,
+                                        height: 48,
+                                      ),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Waktunya Kontrol Nih"),
+                                          Text(
+                                            "Ingat Jadwal kontrol rutin mingguan anda dengan dr. Sandy Sucipto hari selasa",
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(
+                                            height: 6,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("2 jam yang lalu"),
+                                              Text("New")
+                                            ],
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ));
                             },
                           ),
                           ListView.builder(
@@ -195,14 +214,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }
 
   _getBackgroundColor(int index) {
-    if(index == _currentIndex) {
+    if (index == _currentIndex) {
       return Colors.white;
     } else {
       return greyButtonDoktor;
     }
   }
 }
-
 
 // ClipRRect(
 //               borderRadius: BorderRadius.circular(20),
