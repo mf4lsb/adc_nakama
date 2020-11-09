@@ -145,7 +145,7 @@ class MoreScreen extends StatelessWidget {
         );
       },*/
           child: Container(
-        height: 200,
+        height: 230,
         margin: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -164,7 +164,7 @@ class MoreScreen extends StatelessWidget {
             Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
-              height: 76,
+              height: 100,
               child: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +187,7 @@ class MoreScreen extends StatelessWidget {
                           color: Colors.black,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.24),
-                      overflow: TextOverflow.ellipsis,
+                      overflow: TextOverflow.fade,
                     ),
                     SizedBox(
                       height: 5,
