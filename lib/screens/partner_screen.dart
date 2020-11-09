@@ -4,14 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
 import 'package:adc_nakama/main.dart';
 
-class MoreScreen extends StatelessWidget {
+class PartnerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: ListView(
           children: [
-            //* Partner & Career
+            //* Layanan
             SizedBox(
               height: 20,
             ),
@@ -20,7 +20,7 @@ class MoreScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Partner & Career",
+                  Text("Layanan",
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600, fontSize: 24)),
                 ],
@@ -29,7 +29,7 @@ class MoreScreen extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            //* End Partner Career
+            //* End Layanan
             //* Search Bar
             Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
@@ -38,7 +38,7 @@ class MoreScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: Colors.black),
                 autocorrect: true,
                 decoration: InputDecoration(
-                  hintText: 'Search Event & Promo',
+                  hintText: 'Search dokter, fasilitas & layanan',
                   prefixIcon: Icon(Icons.search, color: Colors.grey, size: 16),
                   hintStyle: TextStyle(color: Colors.grey),
                   isDense: true,
@@ -56,7 +56,7 @@ class MoreScreen extends StatelessWidget {
               ),
             ),
             //* End Search Bar
-            //* Partner
+            //* Fasilitas & Layanan Terkini
             Container(
               padding: EdgeInsets.only(left: 20, bottom: 30, top: 30),
               child: Column(
@@ -65,7 +65,7 @@ class MoreScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Partner",
+                      Text("Fasilitas & Layanan Terkini",
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
@@ -76,26 +76,26 @@ class MoreScreen extends StatelessWidget {
                     height: 20,
                   ),
                   SizedBox(
-                    height: 120,
+                    height: 200,
                     child: ListView.builder(
-                      itemCount: 3,
+                      itemCount: 5,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
-                        return cardPartner(context, index);
+                        return cardFasilitasLayanan(context);
                       },
                     ),
                   ),
                 ],
               ),
             ),
-            //* End Partner
-            //* Lowongan
+            //* End Fasilitas & Layanan Terkini
+            //* Event & Promo
             Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, bottom: 80),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Lowongan",
+                    Text("Event & Promo",
                         style: GoogleFonts.poppins(
                             fontSize: 16,
                             color: textTitleCategory,
@@ -104,47 +104,82 @@ class MoreScreen extends StatelessWidget {
                     SizedBox(
                       height: 25,
                     ),
-                    cardLowongan("Tes"),
-                    // cardLowongan(context),
+                    cardEventPromo(context),
+                    cardEventPromo(context),
                   ],
                 )),
-            //* End Lowongan
+            //* End Event & Promo
           ],
         ),
       ),
     );
   }
 
-  // Card Partner
-  Widget cardPartner(BuildContext context, int index) => GestureDetector(
+  // Card Fasilitas & Layanan
+  Widget cardFasilitasLayanan(BuildContext context) => GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PartnerDetailPage(),
+            builder: (context) => FasilitasPage(),
+            //builder: (context) => PartnerPage(),
           ),
         );
       },
       child: Container(
-        width: 120,
+        width: 150,
+        height: 180,
         margin: EdgeInsets.only(right: 10, left: 5),
+        padding: EdgeInsets.only(top: 120),
         decoration: BoxDecoration(
+            color: Colors.grey,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: borderCard)),
-        child: Image.asset('assets/alodokter.png'),
+        child: Container(
+          padding: EdgeInsets.only(left: 10, top: 20),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(begin: Alignment.topRight, stops: [
+            0.01,
+            1
+          ], colors: [
+            Colors.black.withOpacity(0.0),
+            Colors.black.withOpacity(0.15)
+          ])),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Kamar",
+                style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: Colors.white,
+                    letterSpacing: 0.24),
+              ),
+              Text(
+                "Operasi",
+                style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: Colors.white,
+                    letterSpacing: 0.24),
+              ),
+            ],
+          ),
+        ),
       ));
 
-  // Card Lowongan
-  Widget cardLowongan(String a) => GestureDetector(
-          /* onTap: () {
+  // Card Event & Promo
+  Widget cardEventPromo(BuildContext context) => GestureDetector(
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => EventPage(),
           ),
         );
-      },*/
-          child: Container(
+      },
+      child: Container(
         height: 200,
         margin: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
@@ -164,13 +199,14 @@ class MoreScreen extends StatelessWidget {
             Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
+              width: MediaQuery.of(context).size.width,
               height: 76,
               child: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Lowongan",
+                      "Event",
                       style: GoogleFonts.poppins(
                           color: Colors.blue,
                           fontWeight: FontWeight.w600,
@@ -181,7 +217,7 @@ class MoreScreen extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "Perawat (S1 Kep.,Ners, Memiliki STR yang berlaku, IPK Min : 3, Perempuan/ Laki-laki)",
+                      "Cara Membuat Sabun Herbal Sendiri, Bisa Pilih Aroma da..",
                       style: GoogleFonts.poppins(
                           fontSize: 12,
                           color: Colors.black,
