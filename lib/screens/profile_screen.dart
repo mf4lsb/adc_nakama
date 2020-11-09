@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smkdev_nakama/color_palette.dart';
+import 'package:adc_nakama/color_palette.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
