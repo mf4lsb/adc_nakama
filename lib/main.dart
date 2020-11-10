@@ -9,7 +9,6 @@ import 'package:adc_nakama/screens/fasilitas_screen.dart';
 import 'package:adc_nakama/screens/event_screen.dart';
 import 'package:adc_nakama/screens/partner_detail_screen.dart';
 import 'package:adc_nakama/screens/detail_notif_screen.dart';
-import 'package:adc_nakama/screens/tentang_kami_screen.dart';
 import 'screens/home_screen.dart';
 
 void main() {
