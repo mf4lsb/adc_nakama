@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+//import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/screens/booking_screen.dart';
 import 'package:adc_nakama/screens/layanan_screen.dart';
 import 'package:adc_nakama/screens/more_screen.dart';
