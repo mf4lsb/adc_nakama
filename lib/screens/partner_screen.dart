@@ -138,13 +138,15 @@ class PartnerScreen extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(left: 10, top: 20),
           decoration: BoxDecoration(
-              gradient: LinearGradient(begin: Alignment.topRight, stops: [
-            0.01,
-            1
-          ], colors: [
-            Colors.black.withOpacity(0.0),
-            Colors.black.withOpacity(0.15)
-          ])),
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              stops: [0.01, 1],
+              colors: [
+                Colors.black.withOpacity(0.0),
+                Colors.black.withOpacity(0.15)
+              ],
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
