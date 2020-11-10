@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
 
+import 'detail_screen.dart';
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -10,6 +12,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
+  final TextStyle textStyle = GoogleFonts.poppins(
+      fontSize: 14, fontWeight: FontWeight.w600, color: textTitleCard2);
+
   TabController _tabController;
   int _currentIndex = 0;
 
@@ -69,9 +74,11 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Irfan Trianto"),
-                        Text("Laki - Laki"),
-                        Text("0895351577557"),
+                        Text("Irfan Trianto", style: textStyle,),
+                        SizedBox(height: 4,),
+                        Text("Laki - Laki", style: textStyle.copyWith(color: textSubTitleCard2, fontSize: 12),),
+                        SizedBox(height: 4,),
+                        Text("0895351577557", style: textStyle.copyWith(color: textSubTitleCard1, fontSize: 12),),
                       ],
                     ),
                     Container(
@@ -129,6 +136,82 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ListView.builder(
                             itemCount: 10,
                             itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => DetailScreen())),
+                                child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 12),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              color: blueTitleDoktor
+                                                  .withOpacity(0.1)),
+                                          width: 48,
+                                          height: 48,
+                                        ),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Waktunya Kontrol Nih",
+                                                style: textStyle,
+                                              ),
+                                              Text(
+                                                "Ingat Jadwal kontrol rutin mingguan anda dengan dr. Sandy Sucipto hari selasa",
+                                                style: textStyle.copyWith(
+                                                    fontWeight: FontWeight.normal,
+                                                    color: Color(0xFF3C4249),
+                                                    fontSize: 12),
+                                                overflow: TextOverflow.fade,
+                                              ),
+                                              SizedBox(
+                                                height: 6,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "2 jam yang lalu",
+                                                    style: textStyle.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Color(0xFFA6A6A6),
+                                                        fontSize: 13),
+                                                  ),
+                                                  Chip(
+                                                    label: Text(
+                                                      "New",
+                                                      style: textStyle.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontSize: 12),
+                                                    ),
+                                                    backgroundColor: chipOrange2,
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              );
+                            },
+                          ),
+                          ListView.builder(
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
                               return Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 12),
@@ -146,38 +229,59 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       SizedBox(
                                         width: 12,
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Waktunya Kontrol Nih"),
-                                          Text(
-                                            "Ingat Jadwal kontrol rutin mingguan anda dengan dr. Sandy Sucipto hari selasa",
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          SizedBox(
-                                            height: 6,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("2 jam yang lalu"),
-                                              Text("New")
-                                            ],
-                                          )
-                                        ],
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Dokter 1", style: textStyle),
+                                            Text(
+                                              "Umum",
+                                              style: textStyle.copyWith(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Color(0xFF3C4249),
+                                                  fontSize: 12),
+                                              overflow: TextOverflow.fade,
+                                            ),
+                                            SizedBox(
+                                              height: 6,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "2 jam yang lalu",
+                                                  style: textStyle.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color: Color(0xFFA6A6A6),
+                                                      fontSize: 13),
+                                                ),
+                                                Chip(
+                                                    backgroundColor: chipOrange,
+                                                    label: Text(
+                                                      "2 Hari Lagi",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.white),
+                                                    )),
+                                                // child: Text("2 Hari Lagi"))
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       )
                                     ],
                                   ));
                             },
                           ),
-                          ListView.builder(
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return Text("Page 2 - $index");
-                            },
-                          )
                         ],
                       ),
                     )

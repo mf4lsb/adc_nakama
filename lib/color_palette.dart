@@ -15,3 +15,7 @@ const subtitleDoktor = Color.fromRGBO(0, 0, 0, 0.38);
 
 const blueTitleDoktor = Color(0xFF2962FF);
 const greyButtonDoktor = Color(0xFFF2F2F2);
+
+const chipOrange = Color(0xFFF2994A);
+const chipOrange2 = Color(0xFFFF5E20);
+const chipGreen = Color(0xFF6FCF97);
