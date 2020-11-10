@@ -1,3 +1,4 @@
+import 'package:adc_nakama/screens/tentang_kami_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -107,12 +108,22 @@ class HomeScreen extends StatelessWidget {
                               fontSize: 16,
                               color: Colors.white,
                               letterSpacing: 0.24)),
-                      Text("Selengkapnya",
-                          style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 10,
-                              color: Colors.white,
-                              letterSpacing: 0.24)),
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TentangKami(),
+                            ),
+                          );
+                        },
+                        child: Text("Selengkapnya",
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 10,
+                                color: Colors.white,
+                                letterSpacing: 0.24)),
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -144,8 +155,8 @@ class HomeScreen extends StatelessWidget {
             ),
             //* End Tentang kami
             Padding(
-                padding:
-                    const EdgeInsets.only(left: 20, right: 20, top: 34, bottom: 100),
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 34, bottom: 100),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -171,59 +182,123 @@ class HomeScreen extends StatelessWidget {
                     ),
                     //* End Berita Terbaru
                     SizedBox(height: 45),
-                    //* Kontak dan Pengaduan 
+                    //* Kontak dan Pengaduan
                     Text("Kontak & Pengaduan",
                         style: GoogleFonts.poppins(
                             fontSize: 16,
                             color: textTitleCategory,
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0.24)),
-                    SizedBox(height: 24,),
+                    SizedBox(
+                      height: 24,
+                    ),
                     //* Location
                     Row(
                       children: [
-                        SvgPicture.asset("assets/icons/location.svg", width: 22, height: 22, fit: BoxFit.cover,),
-                        SizedBox(width: 9,),
+                        SvgPicture.asset(
+                          "assets/icons/location.svg",
+                          width: 22,
+                          height: 22,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          width: 9,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Rumah Sakit SMKDEV", style: GoogleFonts.poppins(fontWeight: FontWeight.w700, fontSize: 12, color: textTitleCard2),),
-                            Text("Jl. Margacinta No.29", style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 12, color: textSubTitleCard2),)
+                            Text(
+                              "Rumah Sakit SMKDEV",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                  color: textTitleCard2),
+                            ),
+                            Text(
+                              "Jl. Margacinta No.29",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: textSubTitleCard2),
+                            )
                           ],
                         )
                       ],
                     ),
-                    SizedBox(height: 24,),
+                    SizedBox(
+                      height: 24,
+                    ),
                     //* Email
                     Row(
                       children: [
-                        SvgPicture.asset("assets/icons/mail.svg", width: 22, height: 22, fit: BoxFit.cover,),
-                        SizedBox(width: 9,),
-                        Text("info@smk.dev", style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 12, color: textSubTitleCard2),)
+                        SvgPicture.asset(
+                          "assets/icons/mail.svg",
+                          width: 22,
+                          height: 22,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          width: 9,
+                        ),
+                        Text(
+                          "info@smk.dev",
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              color: textSubTitleCard2),
+                        )
                       ],
                     ),
-                    SizedBox(height: 24,),
+                    SizedBox(
+                      height: 24,
+                    ),
                     //* Phone
                     Row(
                       children: [
                         Row(
                           children: [
-                            SvgPicture.asset("assets/icons/phone.svg", width: 22, height: 22, fit: BoxFit.cover,),
-                            SizedBox(width: 9,),
-                            Text("+622 7000 0000", style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 12, color: textSubTitleCard2),)
+                            SvgPicture.asset(
+                              "assets/icons/phone.svg",
+                              width: 22,
+                              height: 22,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(
+                              width: 9,
+                            ),
+                            Text(
+                              "+622 7000 0000",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: textSubTitleCard2),
+                            )
                           ],
                         ),
                         SizedBox(width: 37),
                         Row(
                           children: [
-                            SvgPicture.asset("assets/icons/building.svg", width: 22, height: 22, fit: BoxFit.cover,),
-                            SizedBox(width: 9,),
-                            Text("+622 7000 0000", style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 12, color: textSubTitleCard2),)
+                            SvgPicture.asset(
+                              "assets/icons/building.svg",
+                              width: 22,
+                              height: 22,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(
+                              width: 9,
+                            ),
+                            Text(
+                              "+622 7000 0000",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: textSubTitleCard2),
+                            )
                           ],
                         )
                       ],
                     ),
-                    //* End Kontak dan Pengaduan 
+                    //* End Kontak dan Pengaduan
                   ],
                 ))
           ],
