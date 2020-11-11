@@ -128,53 +128,54 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget bottomNavbar() => Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 60,
-        // decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, spreadRadius: 0, blurRadius: 10, offset: Offset(0, 3)),]),
-        child: BottomNavigationBar(
-          selectedItemColor: Color(0xFF2962FF),
-          unselectedItemColor: Color(0xFFD0D0D0),
-          showUnselectedLabels: true,
-          currentIndex: bottomNavBarIndex,
-          onTap: (index) {
-            setState(() {
-              bottomNavBarIndex = index;
-              pageController.jumpToPage(index);
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              label: "Home",
-              icon: (bottomNavBarIndex == 0)
-                  ? SvgPicture.asset('assets/icons/home_active.svg')
-                  : SvgPicture.asset('assets/icons/home.svg'),
-            ),
-            BottomNavigationBarItem(
-              label: "Layanan",
-              icon: (bottomNavBarIndex == 1)
-                  ? SvgPicture.asset('assets/icons/medical_active.svg')
-                  : SvgPicture.asset('assets/icons/medical.svg'),
-            ),
-            BottomNavigationBarItem(
-              label: "Booking",
-              icon: (bottomNavBarIndex == 2)
-                  ? SvgPicture.asset('assets/icons/calendar_active.svg')
-                  : SvgPicture.asset('assets/icons/calendar.svg'),
-            ),
-            BottomNavigationBarItem(
-              label: "Profile",
-              icon: (bottomNavBarIndex == 3)
-                  ? SvgPicture.asset('assets/icons/user_active.svg')
-                  : SvgPicture.asset('assets/icons/user.svg'),
-            ),
-            BottomNavigationBarItem(
-              label: "More",
-              icon: (bottomNavBarIndex == 4)
-                  ? SvgPicture.asset('assets/icons/more_active.svg')
-                  : SvgPicture.asset('assets/icons/more.svg'),
-            ),
-          ],
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 60,
+          // decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, spreadRadius: 0, blurRadius: 10, offset: Offset(0, 3)),]),
+          child: BottomNavigationBar(
+            selectedItemColor: Color(0xFF2962FF),
+            unselectedItemColor: Color(0xFFD0D0D0),
+            showUnselectedLabels: true,
+            currentIndex: bottomNavBarIndex,
+            onTap: (index) {
+              setState(() {
+                bottomNavBarIndex = index;
+                pageController.jumpToPage(index);
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                label: "Home",
+                icon: (bottomNavBarIndex == 0)
+                    ? SvgPicture.asset('assets/icons/home_active.svg')
+                    : SvgPicture.asset('assets/icons/home.svg'),
+              ),
+              BottomNavigationBarItem(
+                label: "Layanan",
+                icon: (bottomNavBarIndex == 1)
+                    ? SvgPicture.asset('assets/icons/medical_active.svg')
+                    : SvgPicture.asset('assets/icons/medical.svg'),
+              ),
+              BottomNavigationBarItem(
+                label: "Booking",
+                icon: (bottomNavBarIndex == 2)
+                    ? SvgPicture.asset('assets/icons/calendar_active.svg')
+                    : SvgPicture.asset('assets/icons/calendar.svg'),
+              ),
+              BottomNavigationBarItem(
+                label: "Profile",
+                icon: (bottomNavBarIndex == 3)
+                    ? SvgPicture.asset('assets/icons/user_active.svg')
+                    : SvgPicture.asset('assets/icons/user.svg'),
+              ),
+              BottomNavigationBarItem(
+                label: "More",
+                icon: (bottomNavBarIndex == 4)
+                    ? SvgPicture.asset('assets/icons/more_active.svg')
+                    : SvgPicture.asset('assets/icons/more.svg'),
+              ),
+            ],
+          ),
         ),
-      ));
+      );
 }
