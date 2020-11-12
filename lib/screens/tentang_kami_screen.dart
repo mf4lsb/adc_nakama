@@ -10,7 +10,7 @@ class TentangKami extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+              children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(
                     left: 24.0,
@@ -79,6 +79,49 @@ class TentangKami extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 34),
+                  child: Image.asset(
+                    'assets/layanan.png',
+                    width: 150.0,
+                    height: 150.0,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 99.0),
+                  child: Text(
+                    "Layanan Darurat\n\nUnit Gawat Darurat Umum\nSetiap Hari 24 Jam\n\nAmbulans Siaga\n\n+622 7000 0000\n+622 7000 0000\n\nTelepon\n+62813 0000 0000",
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                        color: Color(0xFF333333),
+                        fontSize: 14.0),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 34),
+                  child: Image.asset(
+                    'assets/waktu.png',
+                    width: 150.0,
+                    height: 150.0,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 56.0),
+                  child: Text(
+                    "Waktu Operasional\n\nRumah Sakit\nSenin - Jumat : 08.00 - 20.00\nSabtu : 08.00 - 17.00\nKlinik\nSenin - Jumat : 08.00 - 20.00\nSabtu : 08.00 - 13.00\nBPJS\nSenin - Jumat : 07.00 - 14.00, 16.00 - 19.00\nSabtu : 07.00 - 12.00",
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                        color: Color(0xFF333333),
+                        fontSize: 14.0),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: 41.0,
+                )
               ],
             ),
           ),
