@@ -16,12 +16,12 @@ class _ProfileScreenState extends State<ProfileScreen>
       fontSize: 14, fontWeight: FontWeight.w600, color: textTitleCard2);
 
   TabController _tabController;
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, initialIndex: 0, length: 2);
+    _tabController = TabController(vsync: this, initialIndex: 1, length: 2);
   }
 
   @override
@@ -123,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   _currentIndex = 1;
                                 });
                               },
-                              child: Text("Notifikasi"),
+                              child: Text("History Booking"),
                             ),
                           ),
                         ),
