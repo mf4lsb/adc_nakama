@@ -8,6 +8,11 @@ import 'booking_confirm_screen.dart';
 enum SingingCharacter { pria, wanita, none }
 
 class DoktorScreen extends StatefulWidget {
+
+  final dynamic dokter;
+
+  DoktorScreen({Key key, this.dokter}) : super(key: key);
+
   @override
   _DoktorScreenState createState() => _DoktorScreenState();
 }
@@ -23,11 +28,15 @@ class _DoktorScreenState extends State<DoktorScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            Container(
-              height: 270,
-              child: Image.network(
-                "https://awsimages.detik.net.id/community/media/visual/2016/12/20/56bebe68-da59-461d-b55a-491d598b71d5_43.jpg?w=700&q=90",
-                fit: BoxFit.cover,
+            Hero(
+              tag: widget.dokter.picture,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 270,  
+                child: Image.network(
+                  widget.dokter.picture,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox.expand(

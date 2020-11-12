@@ -1,10 +1,15 @@
 import 'package:adc_nakama/screens/tentang_kami_screen.dart';
+import 'package:adc_nakama/services/doctor_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
 
 import '../widget/carousel_home.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'doktor_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -105,11 +110,11 @@ class HomeScreen extends StatelessWidget {
                       Text("Tentang Kami",
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                              fontSize: 18,
                               color: Colors.white,
                               letterSpacing: 0.24)),
-                      FlatButton(
-                        onPressed: () {
+                      GestureDetector(
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -120,7 +125,7 @@ class HomeScreen extends StatelessWidget {
                         child: Text("Selengkapnya",
                             style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Colors.white,
                                 letterSpacing: 0.24)),
                       ),
@@ -134,20 +139,52 @@ class HomeScreen extends StatelessWidget {
                     height: 215,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey,
+                      color: Colors.grey[300],
                     ),
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          "https://www.klinikmatanusantara.com/fileadmin/user_upload/Dokter-Kami.jpg",
+                      fit: BoxFit.cover,
+                      placeholder: (BuildContext context, String url) =>
+                          Center(child: SpinKitFadingCircle(color: Colors.blue,)),
+                      errorWidget:
+                          (BuildContext context, String url, dynamic error) {
+                        print(error);
+                        return Icon(Icons.error_outline);
+                      },
+                    ),
+                    //         Image.network(
+                    //           "https://www.klinikmatanusantara.com/fileadmin/user_upload/Dokter-Kami.jpg",
+                    //           fit: BoxFit.cover,
+                    //           loadingBuilder: (BuildContext context, Widget child,
+                    // ImageChunkEvent loadingProgress) {
+                    //             if(loadingProgress == null) return child;
+                    //             else return Center(
+                    //               child: CircularProgressIndicator(
+                    //                 value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes : null,
+                    //               ),
+                    //             );
+                    //           },
+                    //         ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
                   SizedBox(
                     height: 200,
-                    child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return cardBlue(context);
+                    child: FutureBuilder(
+                      future: DoctorServices.getDoctor(context),
+                      builder: (context, snapshot) {
+                        dynamic data = snapshot.data.data;
+                        return ListView.builder(
+                          itemCount: data.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return cardBlue(context, data[index]);
+                          },
+                        );
                       },
+                      // child:
                     ),
                   ),
                 ],
@@ -331,7 +368,7 @@ class HomeScreen extends StatelessWidget {
         ],
       );
 
-  Widget cardBlue(BuildContext context) => Container(
+  Widget cardBlue(BuildContext context, dynamic data) => Container(
         width: 133,
         height: 200,
         margin: EdgeInsets.only(right: 15),
@@ -341,14 +378,37 @@ class HomeScreen extends StatelessWidget {
             border: Border.all(color: borderCard)),
         child: Column(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 120,
-              decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8))),
+            GestureDetector(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DoktorScreen(dokter: data,))),
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8))),
+                  child: Hero(
+                    tag: data.picture,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8)),
+                      // child: Image.asset("assets/dokter/1.png", fit: BoxFit.cover)),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            data.picture,
+                        fit: BoxFit.cover,
+                        placeholder: (BuildContext context, String url) =>
+                            Center(child: SpinKitFadingCircle(color: Colors.blue,)),
+                        errorWidget:
+                            (BuildContext context, String url, dynamic error) {
+                          print(error);
+                          return Icon(Icons.error_outline);
+                        },
+                      ),
+                    ),
+                  )),
             ),
             Container(
               padding: const EdgeInsets.all(8),
@@ -358,7 +418,8 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "dr. Setiawai, SpM",
+                    // "dr. Setiawai, SpM",
+                    "dr. " + data.name.first + " " +  data.name.last,
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w600,
                         fontSize: 10,
@@ -369,7 +430,7 @@ class HomeScreen extends StatelessWidget {
                     height: 4,
                   ),
                   Text(
-                    "Katarak dan Bedan Refraktif",
+                    data.workingAs,
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w500,
                         fontSize: 9,
@@ -398,7 +459,7 @@ class HomeScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 height: 120,
                 decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: Colors.grey[300],
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(8),
                         topRight: Radius.circular(8)))),

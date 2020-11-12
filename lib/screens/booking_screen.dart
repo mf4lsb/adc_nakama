@@ -1,4 +1,7 @@
+import 'package:adc_nakama/services/doctor_services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
 import 'package:adc_nakama/screens/doktor_screen.dart';
@@ -27,41 +30,67 @@ class BookingScreen extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.only(bottom: 70),
-          child: ListView.builder(
-            itemCount: 20,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => DoktorScreen())),
-                child: ListTile(
-                  leading: Container(
-                    width: 50,
-                    height: 50,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(100)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.network(
-                        'https://awsimages.detik.net.id/community/media/visual/2016/12/20/56bebe68-da59-461d-b55a-491d598b71d5_43.jpg?w=700&q=90',
-                        fit: BoxFit.cover,
+          child: FutureBuilder(
+              future: DoctorServices.getDoctor(context),
+              builder: (context, snapshot) {
+                dynamic data = snapshot.data.data;
+                return (snapshot.hasData)
+                ? ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => DoktorScreen(
+                                    dokter: data[index],
+                                  ))),
+                      child: ListTile(
+                        leading: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100)),
+                          child: Hero(
+                            tag: data[index].picture,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: CachedNetworkImage(
+                                imageUrl: data[index].picture,
+                                fit: BoxFit.cover,
+                                placeholder:
+                                    (BuildContext context, String url) =>
+                                        Center(
+                                            child: SpinKitFadingCircle(
+                                  color: Colors.blue,
+                                )),
+                                errorWidget: (BuildContext context, String url,
+                                    dynamic error) {
+                                  print(error);
+                                  return Icon(Icons.error_outline);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        title: Text("Dokter ${index + 1}",
+                            style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: titleList)),
+                        subtitle: Text(
+                          "Umum",
+                          style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              fontWeight: FontWeight.normal,
+                              color: subtitleList),
+                        ),
                       ),
-                    ),
-                  ),
-                  title: Text("Dokter ${index + 1}",
-                      style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: titleList)),
-                  subtitle: Text(
-                    "Umum",
-                    style: GoogleFonts.poppins(
-                        fontSize: 11,
-                        fontWeight: FontWeight.normal,
-                        color: subtitleList),
-                  ),
-                ),
-              );
-            },
-          ),
+                    );
+                  },
+                )
+                : SpinKitFadingCircle(color: Colors.blue,);
+              }),
         ));
   }
 }
