@@ -67,7 +67,6 @@ class _DoktorScreenState extends State<DoktorScreen> {
                               height: 8,
                             ),
                             Row(
-                              // add
                               children: [
                                 SvgPicture.asset(
                                   "assets/icons/spesialis.svg",
