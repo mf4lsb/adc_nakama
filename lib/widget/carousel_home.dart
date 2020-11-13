@@ -34,7 +34,8 @@ class _CarouselHomeState extends State<CarouselHome> {
                               },
                               autoPlay: true,
                               autoPlayInterval: Duration(seconds: 3),
-                              enlargeCenterPage: true,),
+                              enlargeCenterPage: false,
+                              viewportFraction: 1),
                           items: listImage
                               .map((item) => Container(
                                     child: CachedNetworkImage(
@@ -58,6 +59,16 @@ class _CarouselHomeState extends State<CarouselHome> {
                                   ))
                               .toList(),
                         )),
+                        Positioned(
+                          left: 20,
+                          top: 48,
+                          child: Column(
+                            children: [
+                              Text("Sekilas Tentang RS. SMKDEV"),
+                              Text("Sekilas Tentang RS. SMKDEV"),
+                            ],
+                          ),
+                        ),
                         Positioned(
                           left: 20,
                           bottom: 10,
