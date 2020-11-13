@@ -37,7 +37,7 @@ class MultiPurposeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(keterangan,
+                    Text(keterangan + " Detail",
                         style: GoogleFonts.poppins(
                           color: textTitleCard2,
                           fontWeight: FontWeight.w600,
@@ -78,7 +78,7 @@ class MultiPurposeScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8,),
-                Center(child: Text("Foto $keterangan - ${data.tempatKerja}", style: GoogleFonts.poppins(color: textSubTitleCard2, fontSize: 10),)),
+                Center(child: Text("Foto ${_keteranganFoto()}", style: GoogleFonts.poppins(color: textSubTitleCard2, fontSize: 10),)),
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
@@ -99,7 +99,7 @@ class MultiPurposeScreen extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        data.namaTempat,
+                        _title(),
                         style: GoogleFonts.poppins(
                             fontSize: 20,
                             letterSpacing: 0.24,
@@ -110,7 +110,7 @@ class MultiPurposeScreen extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        data.tanggalPublish,
+                        _tanggal(),
                         style: GoogleFonts.poppins(
                             fontSize: 12,
                             letterSpacing: 0.24,
@@ -120,7 +120,7 @@ class MultiPurposeScreen extends StatelessWidget {
                       SizedBox(
                         height: 16,
                       ),
-                      Text(data.keteranganTempat),
+                      Text(_deskripsi()),
                       SizedBox(height: 180)
                     ],
                   ),
@@ -129,5 +129,77 @@ class MultiPurposeScreen extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  String _keteranganFoto() {
+    if (keterangan == "Fasilitas"){
+      return keterangan + " - " + data.tempatKerja;
+    }
+    else if(keterangan == "Event" || keterangan == "Promo"){
+      return keterangan + " - " + data.keterangan;
+    }
+    else if(keterangan == "Partner"){
+      return keterangan + " - " + data.company;
+    }
+    else if(keterangan == "Berita"){
+      return keterangan + " - " + "Nakama Company";
+    }
+    else {
+      return "Default Keterangan";
+    }
+  }
+
+  String _title(){
+    if (keterangan == "Fasilitas"){
+      return data.namaTempat;
+    }
+    else if(keterangan == "Event" || keterangan == "Promo"){
+      return data.judul;
+    }
+    else if(keterangan == "Partner"){
+      return data.company;
+    }
+    else if(keterangan == "Berita"){
+      return data.judul;
+    }
+    else {
+      return "Default Judul";
+    }
+  }
+
+  String _tanggal() {
+    if (keterangan == "Fasilitas"){
+      return data.tanggalPublish;
+    }
+    else if(keterangan == "Event" || keterangan == "Promo"){
+      return data.registered;
+    }
+    else if(keterangan == "Partner"){
+      return data.tanggalPublish;
+    } 
+    else if(keterangan == "Berita"){
+      return data.registered;
+    }
+    else{
+      return "00000 Default Tanggal";
+    }
+  }
+  
+  String _deskripsi() {
+    if (keterangan == "Fasilitas"){
+      return data.keteranganTempat;
+    }
+    else if(keterangan == "Event" || keterangan == "Promo"){
+      return data.deskripsi;
+    }
+    else if(keterangan == "Partner"){
+      return data.deskripsi;
+    } 
+    else if(keterangan == "Berita"){
+      return data.deskripsi;
+    }
+    else {
+      return "Default Deskripsi";
+    }
   }
 }

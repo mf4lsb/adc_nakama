@@ -1,21 +1,21 @@
 // To parse this JSON data, do
 //
-//     final carouselModel = carouselModelFromJson(jsonString);
+//     final beritaModel = beritaModelFromJson(jsonString);
 
 import 'dart:convert';
 
-CarouselModel carouselModelFromJson(String str) => CarouselModel.fromJson(json.decode(str));
+BeritaModel beritaModelFromJson(String str) => BeritaModel.fromJson(json.decode(str));
 
-String carouselModelToJson(CarouselModel data) => json.encode(data.toJson());
+String beritaModelToJson(BeritaModel data) => json.encode(data.toJson());
 
-class CarouselModel {
-    CarouselModel({
+class BeritaModel {
+    BeritaModel({
         this.data,
     });
 
     List<Datum> data;
 
-    factory CarouselModel.fromJson(Map<String, dynamic> json) => CarouselModel(
+    factory BeritaModel.fromJson(Map<String, dynamic> json) => BeritaModel(
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
     );
 
@@ -26,24 +26,32 @@ class CarouselModel {
 
 class Datum {
     Datum({
+        this.id,
+        this.picture,
         this.judul,
         this.deskripsi,
-        this.photo,
+        this.registered,
     });
 
+    String id;
+    String picture;
     String judul;
     String deskripsi;
-    String photo;
+    String registered;
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["id"],
+        picture: json["picture"],
         judul: json["judul"],
         deskripsi: json["deskripsi"],
-        photo: json["photo"],
+        registered: json["registered"],
     );
 
     Map<String, dynamic> toJson() => {
+        "id": id,
+        "picture": picture,
         "judul": judul,
         "deskripsi": deskripsi,
-        "photo": photo,
+        "registered": registered,
     };
 }

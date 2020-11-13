@@ -1,4 +1,5 @@
 import 'package:adc_nakama/screens/tentang_kami_screen.dart';
+import 'package:adc_nakama/services/berita_services.dart';
 import 'package:adc_nakama/services/doctor_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +11,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'doktor_screen.dart';
+import 'multi_purpose_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -145,8 +147,10 @@ class HomeScreen extends StatelessWidget {
                       imageUrl:
                           "https://www.klinikmatanusantara.com/fileadmin/user_upload/Dokter-Kami.jpg",
                       fit: BoxFit.cover,
-                      placeholder: (BuildContext context, String url) =>
-                          Center(child: SpinKitFadingCircle(color: Colors.blue,)),
+                      placeholder: (BuildContext context, String url) => Center(
+                          child: SpinKitFadingCircle(
+                        color: Colors.blue,
+                      )),
                       errorWidget:
                           (BuildContext context, String url, dynamic error) {
                         print(error);
@@ -177,16 +181,23 @@ class HomeScreen extends StatelessWidget {
                       builder: (context, snapshot) {
                         dynamic data = snapshot.data;
                         return (snapshot.hasData)
-                        ? (snapshot.data != null)
-                          ? ListView.builder(
-                            itemCount: data.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context, int index) {
-                              return cardBlue(context, data[index]);
-                            },
-                          )
-                          : Center(child: SpinKitFadingCircle(color: Colors.blue,))
-                        : Center(child: SpinKitFadingCircle(color: Colors.blue,));
+                            ? (snapshot.data != null)
+                                ? ListView.builder(
+                                    itemCount: data.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return cardBlue(context, data[index]);
+                                    },
+                                  )
+                                : Center(
+                                    child: SpinKitFadingCircle(
+                                    color: Colors.blue,
+                                  ))
+                            : Center(
+                                child: SpinKitFadingCircle(
+                                color: Colors.blue,
+                              ));
                       },
                       // child:
                     ),
@@ -213,11 +224,28 @@ class HomeScreen extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 200,
-                      child: ListView.builder(
-                        itemCount: 5,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) {
-                          return cardBerita(context);
+                      child: FutureBuilder(
+                        future: BeritaServices.getBerita(context),
+                        builder: (context, snapshot) {
+                          dynamic data = snapshot.data;
+                          return (snapshot.hasData)
+                              ? (snapshot.data != null)
+                                  ? ListView.builder(
+                                      itemCount: data.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return cardBerita(context, data[index]);
+                                      },
+                                    )
+                                  : Center(
+                                      child: SpinKitFadingCircle(
+                                      color: Colors.blue,
+                                    ))
+                              : Center(
+                                  child: SpinKitFadingCircle(
+                                  color: Colors.blue,
+                                ));
                         },
                       ),
                     ),
@@ -383,7 +411,12 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DoktorScreen(dokter: data,))),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DoktorScreen(
+                            dokter: data,
+                          ))),
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 120,
@@ -400,11 +433,13 @@ class HomeScreen extends StatelessWidget {
                           topRight: Radius.circular(8)),
                       // child: Image.asset("assets/dokter/1.png", fit: BoxFit.cover)),
                       child: CachedNetworkImage(
-                        imageUrl:
-                            data.picture,
+                        imageUrl: data.picture,
                         fit: BoxFit.cover,
                         placeholder: (BuildContext context, String url) =>
-                            Center(child: SpinKitFadingCircle(color: Colors.blue,)),
+                            Center(
+                                child: SpinKitFadingCircle(
+                          color: Colors.blue,
+                        )),
                         errorWidget:
                             (BuildContext context, String url, dynamic error) {
                           print(error);
@@ -423,7 +458,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     // "dr. Setiawai, SpM",
-                    "dr. " + data.name.first + " " +  data.name.last,
+                    "dr. " + data.name.first + " " + data.name.last,
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w600,
                         fontSize: 10,
@@ -448,57 +483,94 @@ class HomeScreen extends StatelessWidget {
         ),
       );
 
-  Widget cardBerita(BuildContext context) => Container(
-        width: 196,
-        height: 196,
-        margin: EdgeInsets.only(right: 15),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: borderCard),
-            borderRadius: BorderRadius.circular(8)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
+  Widget cardBerita(BuildContext context, dynamic data) => GestureDetector(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MultiPurposeScreen(data: data, keterangan: "Berita"))),
+        child: Container(
+          width: 196,
+          height: 196,
+          margin: EdgeInsets.only(right: 15),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: borderCard),
+              borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
                 width: MediaQuery.of(context).size.width,
                 height: 120,
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8)))),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
-              width: MediaQuery.of(context).size.width,
-              height: 76,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Training Center",
-                    style: GoogleFonts.poppins(
-                        color: textTitleCard1,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.24,
-                        fontSize: 10),
+                        topRight: Radius.circular(8))),
+                child: Hero(
+                  tag: data.picture,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8)),
+                    // child: Image.asset("assets/dokter/1.png", fit: BoxFit.cover)),
+                    child: CachedNetworkImage(
+                      imageUrl: data.picture,
+                      fit: BoxFit.cover,
+                      placeholder: (BuildContext context, String url) => Center(
+                          child: SpinKitFadingCircle(
+                        color: Colors.blue,
+                      )),
+                      errorWidget:
+                          (BuildContext context, String url, dynamic error) {
+                        print(error);
+                        return Icon(Icons.error_outline);
+                      },
+                    ),
                   ),
-                  SizedBox(
-                    height: 16.5,
-                  ),
-                  Text(
-                    "Training Center bekerjasama dengan SMKDEV is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into elect",
-                    style: GoogleFonts.poppins(
-                        fontSize: 9,
-                        color: textSubTitleCard1,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.24),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ],
+                ),
               ),
-            )
-          ],
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
+                width: MediaQuery.of(context).size.width,
+                height: 76,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _judulResponsive(data.judul),
+                      style: GoogleFonts.poppins(
+                          color: textTitleCard1,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.24,
+                          fontSize: 10),
+                    ),
+                    SizedBox(
+                      height: 16.5,
+                    ),
+                    Text(
+                      data.deskripsi,
+                      style: GoogleFonts.poppins(
+                          fontSize: 9,
+                          color: textSubTitleCard1,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.24),
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       );
+
+  String _judulResponsive(judul) {
+    if(judul.length > 42) {
+      return judul.substring(0,43) + "...";
+    }
+    return judul;
+  }
 }

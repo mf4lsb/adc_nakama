@@ -5,9 +5,8 @@ import 'package:adc_nakama/screens/booking_screen.dart';
 import 'package:adc_nakama/screens/layanan_screen.dart';
 import 'package:adc_nakama/screens/more_screen.dart';
 import 'package:adc_nakama/screens/profile_screen.dart';
-import 'package:adc_nakama/screens/multi_purpose_screen.dart';
+// import 'package:adc_nakama/screens/multi_purpose_screen.dart';
 import 'package:adc_nakama/screens/event_screen.dart';
-import 'package:adc_nakama/screens/partner_detail_screen.dart';
 import 'package:adc_nakama/screens/detail_notif_screen.dart';
 import 'screens/home_screen.dart';
 
@@ -41,11 +40,6 @@ class EventPage extends StatefulWidget {
   EventPageState createState() => EventPageState();
 }
 
-class PartnerDetailPage extends StatefulWidget {
-  @override
-  PartnerDetailPageState createState() => PartnerDetailPageState();
-}
-
 class DetailNotifPage extends StatefulWidget {
   @override
   DetailNotifPageState createState() => DetailNotifPageState();
@@ -56,15 +50,6 @@ class EventPageState extends State<EventPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: EventScreen(),
-    );
-  }
-}
-
-class PartnerDetailPageState extends State<PartnerDetailPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: PartnerDetailScreen(),
     );
   }
 }

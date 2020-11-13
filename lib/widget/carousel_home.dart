@@ -1,3 +1,4 @@
+import 'package:adc_nakama/models/carousel_model.dart';
 import 'package:adc_nakama/services/carousel_services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -17,7 +18,7 @@ class _CarouselHomeState extends State<CarouselHome> {
     return FutureBuilder(
         future: CarouselServices.getCarousel(context),
         builder: (context, snapshot) {
-          List<String> listImage = snapshot.data;
+          List<Datum> listImage = snapshot.data;
           return (snapshot.hasData)
               ? (snapshot.data != null)
                   ? Stack(
@@ -39,7 +40,7 @@ class _CarouselHomeState extends State<CarouselHome> {
                           items: listImage
                               .map((item) => Container(
                                     child: CachedNetworkImage(
-                                      imageUrl: item,
+                                      imageUrl: item.photo,
                                       width: MediaQuery.of(context).size.width,
                                       height: 180,
                                       fit: BoxFit.cover,
@@ -59,16 +60,6 @@ class _CarouselHomeState extends State<CarouselHome> {
                                   ))
                               .toList(),
                         )),
-                        Positioned(
-                          left: 20,
-                          top: 48,
-                          child: Column(
-                            children: [
-                              Text("Sekilas Tentang RS. SMKDEV"),
-                              Text("Sekilas Tentang RS. SMKDEV"),
-                            ],
-                          ),
-                        ),
                         Positioned(
                           left: 20,
                           bottom: 10,

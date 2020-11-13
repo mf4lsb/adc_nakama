@@ -77,13 +77,13 @@ class BookingScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          title: Text("Dokter ${index + 1}",
+                          title: Text("dr. " + data[index].name.first + " " + data[index].name.last,
                               style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: titleList)),
                           subtitle: Text(
-                            "Umum",
+                            data[index].workingAs,
                             style: GoogleFonts.poppins(
                                 fontSize: 11,
                                 fontWeight: FontWeight.normal,

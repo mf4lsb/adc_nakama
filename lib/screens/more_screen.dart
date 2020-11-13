@@ -1,8 +1,12 @@
+import 'package:adc_nakama/screens/multi_purpose_screen.dart';
+import 'package:adc_nakama/services/lowongan_services.dart';
+import 'package:adc_nakama/services/partner_services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 //import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
-import 'package:adc_nakama/main.dart';
 
 class MoreScreen extends StatelessWidget {
   @override
@@ -77,13 +81,30 @@ class MoreScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 120,
-                    child: ListView.builder(
-                      itemCount: 3,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return cardPartner(context, index);
-                      },
-                    ),
+                    child: FutureBuilder(
+                        future: PartnerServices.getPartner(context),
+                        builder: (context, snapshot) {
+                          dynamic data = snapshot.data;
+                          return (snapshot.hasData)
+                              ? (snapshot.data != null)
+                                  ? ListView.builder(
+                                      itemCount: data.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return cardPartner(
+                                            context, index, data[index]);
+                                      },
+                                    )
+                                  : Center(
+                                      child: SpinKitFadingCircle(
+                                      color: Colors.blue,
+                                    ))
+                              : Center(
+                                  child: SpinKitFadingCircle(
+                                  color: Colors.blue,
+                                ));
+                        }),
                   ),
                 ],
               ),
@@ -104,7 +125,29 @@ class MoreScreen extends StatelessWidget {
                     SizedBox(
                       height: 25,
                     ),
-                    cardLowongan("Tes"),
+                    FutureBuilder(
+                        future: LowonganServices.getLowongan(context),
+                        builder: (context, snapshot) {
+                          dynamic data = snapshot.data;
+                          return (snapshot.hasData)
+                              ? (snapshot.data != null)
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemCount: 5,
+                                      itemBuilder: (context, index) {
+                                        return cardLowongan(
+                                            context, data[index]);
+                                      })
+                                  : Center(
+                                      child: SpinKitFadingCircle(
+                                      color: Colors.blue,
+                                    ))
+                              : Center(
+                                  child: SpinKitFadingCircle(
+                                  color: Colors.blue,
+                                ));
+                        }),
                     // cardLowongan(context),
                   ],
                 )),
@@ -116,35 +159,54 @@ class MoreScreen extends StatelessWidget {
   }
 
   // Card Partner
-  Widget cardPartner(BuildContext context, int index) => GestureDetector(
+  Widget cardPartner(BuildContext context, int index, dynamic data) =>
+      GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    MultiPurposeScreen(data: data, keterangan: "Partner"),
+              ),
+            );
+          },
+          child: Container(
+            width: 120,
+            margin: EdgeInsets.only(right: 10, left: 5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: borderCard)),
+            child: Hero(
+              tag: data.id,
+              child: CachedNetworkImage(
+                imageUrl: data.picture,
+                fit: BoxFit.fill,
+                placeholder: (BuildContext context, String url) => Center(
+                    child: SpinKitFadingCircle(
+                  color: Colors.blue,
+                )),
+                errorWidget: (BuildContext context, String url, dynamic error) {
+                  print(error);
+                  return Icon(Icons.error_outline);
+                },
+              ),
+            ),
+          ));
+
+  // Card Lowongan
+  Widget cardLowongan(BuildContext context, dynamic data) => GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PartnerDetailPage(),
+            builder: (context) => MultiPurposeScreen(
+              data: data,
+              keterangan: "Lowongan",
+            ),
           ),
         );
       },
       child: Container(
-        width: 120,
-        margin: EdgeInsets.only(right: 10, left: 5),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: borderCard)),
-        child: Image.asset('assets/alodokter.png'),
-      ));
-
-  // Card Lowongan
-  Widget cardLowongan(String a) => GestureDetector(
-          /* onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EventPage(),
-          ),
-        );
-      },*/
-          child: Container(
         height: 230,
         margin: EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
@@ -155,12 +217,30 @@ class MoreScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                height: 120,
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8)))),
+              width: MediaQuery.of(context).size.width,
+              height: 120,
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8))),
+              child: Hero(
+                tag: data.id,
+                child: CachedNetworkImage(
+                  imageUrl: data.picture,
+                  fit: BoxFit.cover,
+                  placeholder: (BuildContext context, String url) => Center(
+                      child: SpinKitFadingCircle(
+                    color: Colors.blue,
+                  )),
+                  errorWidget:
+                      (BuildContext context, String url, dynamic error) {
+                    print(error);
+                    return Icon(Icons.error_outline);
+                  },
+                ),
+              ),
+            ),
             Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
@@ -181,7 +261,7 @@ class MoreScreen extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "Perawat (S1 Kep.,Ners, Memiliki STR yang berlaku, IPK Min : 3, Perempuan/ Laki-laki)",
+                      data.namaLowongan,
                       style: GoogleFonts.poppins(
                           fontSize: 12,
                           color: Colors.black,
@@ -193,7 +273,7 @@ class MoreScreen extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "23 Sep 2020",
+                      data.registered,
                       style: GoogleFonts.poppins(
                           color: Colors.grey,
                           letterSpacing: 0.24,

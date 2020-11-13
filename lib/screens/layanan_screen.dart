@@ -1,4 +1,5 @@
 import 'package:adc_nakama/screens/multi_purpose_screen.dart';
+import 'package:adc_nakama/services/event_promo_services.dart';
 import 'package:adc_nakama/services/fasilitas_services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 //import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
-import 'package:adc_nakama/main.dart';
 
 class LayananScreen extends StatelessWidget {
   @override
@@ -125,8 +125,29 @@ class LayananScreen extends StatelessWidget {
                     SizedBox(
                       height: 25,
                     ),
-                    cardEventPromo(context),
-                    cardEventPromo(context),
+                    FutureBuilder(
+                        future: EventPromoServices.getFasilitas(context),
+                        builder: (context, snapshot) {
+                          dynamic data = snapshot.data;
+                          return (snapshot.hasData)
+                              ? (snapshot.data != null)
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemCount: 5,
+                                      itemBuilder: (context, index) {
+                                        return cardEventPromo(
+                                            context, data[index]);
+                                      })
+                                  : Center(
+                                      child: SpinKitFadingCircle(
+                                      color: Colors.blue,
+                                    ))
+                              : Center(
+                                  child: SpinKitFadingCircle(
+                                  color: Colors.blue,
+                                ));
+                        }),
                   ],
                 )),
             //* End Event & Promo
@@ -239,12 +260,12 @@ class LayananScreen extends StatelessWidget {
   // ));
 
   // Card Event & Promo
-  Widget cardEventPromo(BuildContext context) => GestureDetector(
+  Widget cardEventPromo(BuildContext context, dynamic data) => GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EventPage(),
+            builder: (context) => MultiPurposeScreen(data: data, keterangan: data.keterangan),
           ),
         );
       },
@@ -259,12 +280,29 @@ class LayananScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                height: 120,
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8)))),
+              width: MediaQuery.of(context).size.width,
+              height: 120,
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8))),
+              child: Hero(
+                tag: data.id,
+                child: CachedNetworkImage(
+                  imageUrl: data.picture,
+                  fit: BoxFit.cover,
+                  placeholder: (BuildContext context, String url) => Center(
+                      child: SpinKitFadingCircle(
+                    color: Colors.blue,
+                  )),
+                  errorWidget: (BuildContext context, String url, dynamic error) {
+                    print(error);
+                    return Icon(Icons.error_outline);
+                  },
+                ),
+              ),
+            ),
             Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 7.5, horizontal: 12),
@@ -275,7 +313,7 @@ class LayananScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Event",
+                      data.keterangan,
                       style: GoogleFonts.poppins(
                           color: Colors.blue,
                           fontWeight: FontWeight.w600,
@@ -286,7 +324,7 @@ class LayananScreen extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "Cara Membuat Sabun Herbal Sendiri, Bisa Pilih Aroma da..",
+                      data.judul,
                       style: GoogleFonts.poppins(
                           fontSize: 12,
                           color: Colors.black,
@@ -298,7 +336,7 @@ class LayananScreen extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "23 Sep 2020",
+                      data.registered,
                       style: GoogleFonts.poppins(
                           color: Colors.grey,
                           letterSpacing: 0.24,
