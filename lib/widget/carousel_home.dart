@@ -34,8 +34,7 @@ class _CarouselHomeState extends State<CarouselHome> {
                               },
                               autoPlay: true,
                               autoPlayInterval: Duration(seconds: 3),
-                              enlargeCenterPage: false,
-                              viewportFraction: 1),
+                              enlargeCenterPage: true,),
                           items: listImage
                               .map((item) => Container(
                                     child: CachedNetworkImage(
