@@ -1,8 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
 
-class FasilitasScreen extends StatelessWidget {
+class MultiPurposeScreen extends StatelessWidget {
+  final dynamic data;
+  final String keterangan;
+  MultiPurposeScreen({Key key, this.data, this.keterangan}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,7 @@ class FasilitasScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text("Fasilitas",
+                    Text(keterangan,
                         style: GoogleFonts.poppins(
                           color: textTitleCard2,
                           fontWeight: FontWeight.w600,
@@ -49,11 +54,31 @@ class FasilitasScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 150,
-                  color: Colors.grey,
+                Hero(
+                  tag: data.id,
+                  child: Container(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.grey[300],
+                    child: CachedNetworkImage(
+                      imageUrl: data.picture,
+                      width: 150,
+                      height: 180,
+                      fit: BoxFit.cover,
+                      placeholder: (BuildContext context, String url) => Center(
+                          child: SpinKitFadingCircle(
+                        color: Colors.blue,
+                      )),
+                      errorWidget:
+                          (BuildContext context, String url, dynamic error) {
+                        print(error);
+                        return Icon(Icons.error_outline);
+                      },
+                    ),
+                  ),
                 ),
-                //* Jadwal
+                SizedBox(height: 8,),
+                Center(child: Text("Foto $keterangan - ${data.tempatKerja}", style: GoogleFonts.poppins(color: textSubTitleCard2, fontSize: 10),)),
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
@@ -63,7 +88,7 @@ class FasilitasScreen extends StatelessWidget {
                         height: 12,
                       ),
                       Text(
-                        "Fasilitas",
+                        keterangan,
                         style: GoogleFonts.poppins(
                             fontSize: 12,
                             letterSpacing: 0.24,
@@ -74,7 +99,7 @@ class FasilitasScreen extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        "Ruang Pemeriksaan",
+                        data.namaTempat,
                         style: GoogleFonts.poppins(
                             fontSize: 20,
                             letterSpacing: 0.24,
@@ -85,7 +110,7 @@ class FasilitasScreen extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        "06 Aug 2020",
+                        data.tanggalPublish,
                         style: GoogleFonts.poppins(
                             fontSize: 12,
                             letterSpacing: 0.24,
@@ -95,8 +120,7 @@ class FasilitasScreen extends StatelessWidget {
                       SizedBox(
                         height: 16,
                       ),
-                      Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                      Text(data.keteranganTempat),
                       SizedBox(height: 180)
                     ],
                   ),

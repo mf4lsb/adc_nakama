@@ -1,3 +1,4 @@
+import 'package:adc_nakama/screens/multi_purpose_screen.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -121,7 +122,7 @@ class PartnerScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FasilitasPage(),
+            builder: (context) => MultiPurposeScreen(),
             //builder: (context) => PartnerPage(),
           ),
         );

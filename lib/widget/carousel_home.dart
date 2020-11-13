@@ -1,5 +1,8 @@
+import 'package:adc_nakama/services/carousel_services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CarouselHome extends StatefulWidget {
   @override
@@ -11,55 +14,98 @@ class _CarouselHomeState extends State<CarouselHome> {
 
   @override
   Widget build(BuildContext context) {
-    List<int> list = [1, 2, 3, 4, 5];
-    return Stack(
-      children: [
-        Container(
-            child: CarouselSlider(
-          options: CarouselOptions(onPageChanged: (index, reason) {
-            setState(() {
-              _current = index;
-            });
-          }),
-          items: list
-              .map((item) => Container(
-                    child: Center(child: Text(item.toString())),
-                    color: Colors.green,
-                  ))
-              .toList(),
-        )),
-        Positioned(
-          left: 20,
-          bottom: 10,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: list.map((url) {
-              int index = list.indexOf(url);
-              return (_current == index)
-                  ? Container(
-                      width: 25.0,
-                      height: 9.0,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: _current == index ? Colors.blue : Colors.white,
+    return FutureBuilder(
+        future: CarouselServices.getCarousel(context),
+        builder: (context, snapshot) {
+          List<String> listImage = snapshot.data;
+          return (snapshot.hasData)
+              ? (snapshot.data != null)
+                  ? Stack(
+                      children: [
+                        Container(
+                            child: CarouselSlider(
+                          options: CarouselOptions(
+                              onPageChanged: (index, reason) {
+                                setState(
+                                  () {
+                                    _current = index;
+                                  },
+                                );
+                              },
+                              autoPlay: true,
+                              autoPlayInterval: Duration(seconds: 3),
+                              enlargeCenterPage: false,
+                              viewportFraction: 1),
+                          items: listImage
+                              .map((item) => Container(
+                                    child: CachedNetworkImage(
+                                      imageUrl: item,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 180,
+                                      fit: BoxFit.cover,
+                                      placeholder:
+                                          (BuildContext context, String url) =>
+                                              Center(
+                                                  child: SpinKitFadingCircle(
+                                        color: Colors.blue,
+                                      )),
+                                      errorWidget: (BuildContext context,
+                                          String url, dynamic error) {
+                                        print(error);
+                                        return Icon(Icons.error_outline);
+                                      },
+                                    ),
+                                    color: Colors.green,
+                                  ))
+                              .toList(),
+                        )),
+                        Positioned(
+                          left: 20,
+                          bottom: 10,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: listImage.map((url) {
+                              int index = listImage.indexOf(url);
+                              return (_current == index)
+                                  ? Container(
+                                      width: 25.0,
+                                      height: 9.0,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 5.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: _current == index
+                                            ? Colors.blue
+                                            : Colors.white,
+                                      ),
+                                    )
+                                  : Container(
+                                      width: 10.0,
+                                      height: 9.0,
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 4.0),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: _current == index
+                                            ? Colors.blue
+                                            : Colors.white,
+                                      ),
+                                    );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Center(
+                      child: SpinKitFadingCircle(
+                        color: Colors.blue,
                       ),
                     )
-                  : Container(
-                      width: 10.0,
-                      height: 9.0,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _current == index ? Colors.blue : Colors.white,
-                      ),
-                    );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
+              : Center(
+                  child: SpinKitFadingCircle(
+                    color: Colors.blue,
+                  ),
+                );
+        });
   }
 }

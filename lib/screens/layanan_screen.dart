@@ -1,4 +1,8 @@
+import 'package:adc_nakama/screens/multi_purpose_screen.dart';
+import 'package:adc_nakama/services/fasilitas_services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 //import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
@@ -77,13 +81,30 @@ class LayananScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 200,
-                    child: ListView.builder(
-                      itemCount: 5,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return cardFasilitasLayanan(context);
-                      },
-                    ),
+                    child: FutureBuilder(
+                        future: FasilitasServices.getFasilitas(context),
+                        builder: (context, snapshot) {
+                          dynamic data = snapshot.data;
+                          return (snapshot.hasData)
+                              ? (snapshot.data != null)
+                                  ? ListView.builder(
+                                      itemCount: data.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return cardFasilitasLayanan(
+                                            context, data[index]);
+                                      },
+                                    )
+                                  : Center(
+                                      child: SpinKitFadingCircle(
+                                      color: Colors.blue,
+                                    ))
+                              : Center(
+                                  child: SpinKitFadingCircle(
+                                  color: Colors.blue,
+                                ));
+                        }),
                   ),
                 ],
               ),
@@ -116,57 +137,106 @@ class LayananScreen extends StatelessWidget {
   }
 
   // Card Fasilitas & Layanan
-  Widget cardFasilitasLayanan(BuildContext context) => GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FasilitasPage(),
-          ),
-        );
-      },
-      child: Container(
-        width: 150,
-        height: 180,
-        margin: EdgeInsets.only(right: 10, left: 5),
-        padding: EdgeInsets.only(top: 120),
-        decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: borderCard)),
-        child: Container(
-          padding: EdgeInsets.only(left: 10, top: 20),
-          decoration: BoxDecoration(
-              gradient: LinearGradient(begin: Alignment.topRight, stops: [
-            0.01,
-            1
-          ], colors: [
-            Colors.black.withOpacity(0.0),
-            Colors.black.withOpacity(0.15)
-          ])),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Kamar",
+  Widget cardFasilitasLayanan(BuildContext context, dynamic data) =>
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  MultiPurposeScreen(data: data, keterangan: "Fasilitas"),
+            ),
+          );
+        },
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                border: Border.all(color: borderCard),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(right: 10),
+              child: Hero(
+                tag: data.id,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: data.picture,
+                    width: 150,
+                    height: 180,
+                    fit: BoxFit.cover,
+                    placeholder: (BuildContext context, String url) => Center(
+                        child: SpinKitFadingCircle(
+                      color: Colors.blue,
+                    )),
+                    errorWidget:
+                        (BuildContext context, String url, dynamic error) {
+                      print(error);
+                      return Icon(Icons.error_outline);
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 40,
+              left: 10,
+              child: Text(
+                data.namaTempat,
                 style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontSize: 16,
                     color: Colors.white,
                     letterSpacing: 0.24),
               ),
-              Text(
-                "Operasi",
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Colors.white,
-                    letterSpacing: 0.24),
-              ),
-            ],
-          ),
+            )
+            // return str.split(' ').length;
+          ],
         ),
-      ));
+      );
+  // child: Container(
+  //   width: 150,
+  //   height: 180,
+  //   margin: EdgeInsets.only(right: 10, left: 5),
+  //   padding: EdgeInsets.only(top: 120),
+  //   decoration: BoxDecoration(
+  //       color: Colors.grey,
+  //       borderRadius: BorderRadius.circular(8),
+  //       border: Border.all(color: borderCard)),
+  //   child: Container(
+  //     padding: EdgeInsets.only(left: 10, top: 20),
+  //     decoration: BoxDecoration(
+  //         gradient: LinearGradient(begin: Alignment.topRight, stops: [
+  //       0.01,
+  //       1
+  //     ], colors: [
+  //       Colors.black.withOpacity(0.0),
+  //       Colors.black.withOpacity(0.15)
+  //     ])),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           "Kamar",
+  //           style: GoogleFonts.poppins(
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 14,
+  //               color: Colors.white,
+  //               letterSpacing: 0.24),
+  //         ),
+  //         Text(
+  //           "Operasi",
+  //           style: GoogleFonts.poppins(
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 14,
+  //               color: Colors.white,
+  //               letterSpacing: 0.24),
+  //         ),
+  //       ],
+  //     ),
+  //   ),
+  // ));
 
   // Card Event & Promo
   Widget cardEventPromo(BuildContext context) => GestureDetector(

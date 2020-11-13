@@ -175,14 +175,18 @@ class HomeScreen extends StatelessWidget {
                     child: FutureBuilder(
                       future: DoctorServices.getDoctor(context),
                       builder: (context, snapshot) {
-                        dynamic data = snapshot.data.data;
-                        return ListView.builder(
-                          itemCount: data.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index) {
-                            return cardBlue(context, data[index]);
-                          },
-                        );
+                        dynamic data = snapshot.data;
+                        return (snapshot.hasData)
+                        ? (snapshot.data != null)
+                          ? ListView.builder(
+                            itemCount: data.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (BuildContext context, int index) {
+                              return cardBlue(context, data[index]);
+                            },
+                          )
+                          : Center(child: SpinKitFadingCircle(color: Colors.blue,))
+                        : Center(child: SpinKitFadingCircle(color: Colors.blue,));
                       },
                       // child:
                     ),

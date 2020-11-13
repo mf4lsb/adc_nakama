@@ -1,4 +1,6 @@
+carousel, layanan clearimport 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,7 +10,6 @@ import 'booking_confirm_screen.dart';
 enum SingingCharacter { pria, wanita, none }
 
 class DoktorScreen extends StatefulWidget {
-
   final dynamic dokter;
 
   DoktorScreen({Key key, this.dokter}) : super(key: key);
@@ -19,8 +20,21 @@ class DoktorScreen extends StatefulWidget {
 
 class _DoktorScreenState extends State<DoktorScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController noHpController = TextEditingController();
+
+  bool _btnEnabled = false;
 
   SingingCharacter _character = SingingCharacter.none;
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    noHpController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +46,19 @@ class _DoktorScreenState extends State<DoktorScreen> {
               tag: widget.dokter.picture,
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: 270,  
-                child: Image.network(
-                  widget.dokter.picture,
+                height: 270,
+                child: CachedNetworkImage(
+                  imageUrl: widget.dokter.picture,
                   fit: BoxFit.cover,
+                  placeholder: (BuildContext context, String url) => Center(
+                      child: SpinKitFadingCircle(
+                    color: Colors.blue,
+                  )),
+                  errorWidget:
+                      (BuildContext context, String url, dynamic error) {
+                    print(error);
+                    return Icon(Icons.error_outline);
+                  },
                 ),
               ),
             ),
@@ -58,7 +81,11 @@ class _DoktorScreenState extends State<DoktorScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Dokter 1",
+                            Text(
+                                "dr. " +
+                                    widget.dokter.name.first +
+                                    " " +
+                                    widget.dokter.name.last,
                                 style: GoogleFonts.poppins(
                                     color: textTitleCard2,
                                     fontSize: 20,
@@ -78,7 +105,7 @@ class _DoktorScreenState extends State<DoktorScreen> {
                                   width: 10,
                                 ),
                                 Text(
-                                  "Umum",
+                                  widget.dokter.workingAs,
                                   style: GoogleFonts.poppins(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
@@ -107,11 +134,12 @@ class _DoktorScreenState extends State<DoktorScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Senin"),
-                                    Text("08.00-14.00 WIB")
+                                    Text(widget.dokter.jadwalHari.hariSatu),
+                                    Text(widget.dokter.jadwalJam.shiftSatu)
                                   ],
                                 ),
-                                Text("RS SMKDEV")
+                                Text(_tempatKerja(
+                                    widget.dokter.tempatKerja.index))
                               ],
                             ),
                             SizedBox(
@@ -123,11 +151,12 @@ class _DoktorScreenState extends State<DoktorScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Selasa"),
-                                    Text("08.00-14.00 WIB")
+                                    Text(widget.dokter.jadwalHari.hariDua),
+                                    Text(widget.dokter.jadwalJam.shiftDua)
                                   ],
                                 ),
-                                Text("RS SMKDEV")
+                                Text(_tempatKerja(
+                                    widget.dokter.tempatKerja.index))
                               ],
                             ),
                             SizedBox(
@@ -139,11 +168,12 @@ class _DoktorScreenState extends State<DoktorScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Rabu"),
-                                    Text("08.00-10.00 WIB")
+                                    Text(widget.dokter.jadwalHari.hariTiga),
+                                    Text(widget.dokter.jadwalJam.shiftTiga)
                                   ],
                                 ),
-                                Text("Klinik SMKDEV")
+                                Text(_tempatKerja(
+                                    widget.dokter.tempatKerja.index))
                               ],
                             ),
                             //* End Jadwal
@@ -162,8 +192,7 @@ class _DoktorScreenState extends State<DoktorScreen> {
                             SizedBox(
                               height: 16,
                             ),
-                            Text(
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                            Text(widget.dokter.biografi),
                             //* End Biografi
                             SizedBox(
                               height: 24,
@@ -180,8 +209,7 @@ class _DoktorScreenState extends State<DoktorScreen> {
                             SizedBox(
                               height: 16,
                             ),
-                            Text(
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                            Text(widget.dokter.kredensial),
                             //* End Kredensial
                             SizedBox(
                               height: 24,
@@ -198,8 +226,7 @@ class _DoktorScreenState extends State<DoktorScreen> {
                             SizedBox(
                               height: 16,
                             ),
-                            Text(
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                            Text(widget.dokter.afliansiAkademik),
                             //* End Afliansi Akademik
                             SizedBox(height: 180)
                           ],
@@ -259,8 +286,8 @@ class _DoktorScreenState extends State<DoktorScreen> {
         child: ButtonTheme(
           height: 44,
           child: RaisedButton(
-            onPressed: () =>
-                _settingModalBottomSheet(context, _formKey, _character),
+            onPressed: () => _settingModalBottomSheet(context, _formKey,
+                _character, nameController, emailController, noHpController, _btnEnabled),
             color: blueTitleDoktor,
             child: Text(
               "Buat Janji",
@@ -276,10 +303,18 @@ class _DoktorScreenState extends State<DoktorScreen> {
       ),
     );
   }
+
+  String _tempatKerja(index) {
+    if (index == 0) {
+      return "KLINIK NAKAMA";
+    } else {
+      return "RS NAKAMA";
+    }
+  }
 }
 
 void _settingModalBottomSheet(
-    BuildContext context, key, SingingCharacter character) {
+    BuildContext context, key, SingingCharacter character, name, email, noHp, btnConditions) {
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -333,6 +368,8 @@ void _settingModalBottomSheet(
                       ),
                       Form(
                         key: key,
+                        onChanged: () => mystate(() => btnConditions = key.currentState.validate()),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -348,6 +385,13 @@ void _settingModalBottomSheet(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8)),
                               child: TextFormField(
+                                controller: name,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Anda tidak dapat mengkosongkan ini!";
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: "Nama",
@@ -440,6 +484,14 @@ void _settingModalBottomSheet(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8)),
                               child: TextFormField(
+                                controller: noHp,
+                                keyboardType: TextInputType.number,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Anda tidak dapat mengkosongkan ini!";
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: "No handphone",
@@ -469,6 +521,21 @@ void _settingModalBottomSheet(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8)),
                               child: TextFormField(
+                                controller: email,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Anda tidak dapat mengkosongkan ini!";
+                                  }
+
+                                  Pattern pattern =
+                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                  RegExp regex = RegExp(pattern);
+
+                                  if (!regex.hasMatch(value)) {
+                                    return "Email tidak valid";
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: "Email",
