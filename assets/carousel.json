@@ -1,9 +1,29 @@
 {
     "data": [
-        "https://lh3.googleusercontent.com/proxy/wOu_u5skWVzlrAp8TornLkvFhbe4ZCeFz35q4nfZ-Pf05sy1J4jDK2kWULg_zYKXRdisIOnvXdsPrcmH9KsSd3nWs4aSF5SNEfmbob566QiW6GDhbIVdFJxbzjzBWz3ahVG5",
-        "https://lh3.googleusercontent.com/proxy/0SJM7ZfJG30ImFB_dSpDO9EkhGBTyYYKBFcNVexTH9pndFznQea_zQRfBdHOlOa5CS2hMoDNyXZQOTdAsQtLuPUWkUUN6b-C-5txwURh1EY",
-        "https://4.bp.blogspot.com/-yv9NK5dKYKc/Xi5wjGrMy-I/AAAAAAAAcg4/H_SztHvzrd4dYxx8KIjrn4olXVXCxyjRwCLcBGAsYHQ/s1600/Alur-kamar-operasi.jpg",
-        "https://rssyarifhidayatullah.com/images/sosialisasi_layanan_22_nov/sosialisasi_3.jpg",
-        "https://static.republika.co.id/uploads/images/inpicture_slide/rumah-sakit-pku-muhammadiyah-solo-menggelar-kegiatan-pengobatan-gratis-_181111143326-482.png"
+        {
+            "judul": "Senam sehat bersama petugas COVID-19 RS Nakama",
+            "deskripsi": "RS Nakama melakukan senam sehat di lapangan RS Nakama bersama para petugas lainnya dan para pasien COVID-19. Hal ini dilakukan demi percepatan kesembuhan para pasien",
+            "photo": "https://cdn-2.tstatic.net/ternate/foto/bank/images/wisma-atlet-kemayoran-jakarta.jpg"
+        },
+        {
+            "judul": "Family Gathering RS Nakama",
+            "deskripsi": "RS Nakama melakukan family gathering bersama tim dokter dan suster ngesot. Melakukannya di aula RS Nakama bersama para relawan COVID-19",
+            "photo": "https://pwmu.co/wp-content/uploads/2019/07/IMG-20190727-WA0052_EDIT_1.jpg"
+        },
+        {
+            "judul": "Pembangunan Kamar Operasi",
+            "deskripsi": "pembangunan kamar operasi telah selesai",
+            "photo": "https://4.bp.blogspot.com/-yv9NK5dKYKc/Xi5wjGrMy-I/AAAAAAAAcg4/H_SztHvzrd4dYxx8KIjrn4olXVXCxyjRwCLcBGAsYHQ/s1600/Alur-kamar-operasi.jpg"
+        },
+        {
+            "judul": "Sosialisasi bersama para anak kerja praktek",
+            "deskripsi": "Klinik nakama melakukan sosialisasi bersama anak kerja pratek SMK Nakama",
+            "photo": "https://rssyarifhidayatullah.com/images/sosialisasi_layanan_22_nov/sosialisasi_3.jpg"
+        },
+        {
+            "judul": "Pengobatan vaksin untuk para Lansia",
+            "deskripsi": "Pengobatan dilakukan kepada para lansia dari kecamatan sukaraja, kab bogor.",
+            "photo": "https://static.republika.co.id/uploads/images/inpicture_slide/rumah-sakit-pku-muhammadiyah-solo-menggelar-kegiatan-pengobatan-gratis-_181111143326-482.png"
+        }
     ]
 }
