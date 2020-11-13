@@ -202,14 +202,17 @@ class LayananScreen extends StatelessWidget {
             ),
             Positioned(
               bottom: 40,
-              left: 10,
-              child: Text(
-                data.namaTempat,
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: Colors.white,
-                    letterSpacing: 0.24),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                width: 150,
+                child: Text(
+                  data.namaTempat,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.white,
+                      letterSpacing: 0.24),
+                ),
               ),
             )
             // return str.split(' ').length;
