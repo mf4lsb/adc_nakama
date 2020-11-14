@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail_screen.dart';
@@ -243,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 return (snapshot.hasData)
                                     ? (snapshot.data != null)
                                         ? ListView.builder(
-                                            itemCount: 10,
+                                            itemCount: data.length,
                                             itemBuilder: (context, index) {
                                               return Container(
                                                   padding: const EdgeInsets
@@ -264,29 +265,37 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                         0.1)),
                                                         width: 48,
                                                         height: 48,
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl: data[index]
-                                                              [2],
-                                                          fit: BoxFit.cover,
-                                                          placeholder: (BuildContext
-                                                                      context,
-                                                                  String url) =>
-                                                              Center(
-                                                                  child:
-                                                                      SpinKitFadingCircle(
-                                                            color: Colors.blue,
-                                                          )),
-                                                          errorWidget:
-                                                              (BuildContext
-                                                                      context,
-                                                                  String url,
-                                                                  dynamic
-                                                                      error) {
-                                                            print(error);
-                                                            return Icon(Icons
-                                                                .error_outline);
-                                                          },
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      100),
+                                                          child:
+                                                              CachedNetworkImage(
+                                                            imageUrl:
+                                                                data[index][2],
+                                                            fit: BoxFit.cover,
+                                                            placeholder: (BuildContext
+                                                                        context,
+                                                                    String
+                                                                        url) =>
+                                                                Center(
+                                                                    child:
+                                                                        SpinKitFadingCircle(
+                                                              color:
+                                                                  Colors.blue,
+                                                            )),
+                                                            errorWidget:
+                                                                (BuildContext
+                                                                        context,
+                                                                    String url,
+                                                                    dynamic
+                                                                        error) {
+                                                              print(error);
+                                                              return Icon(Icons
+                                                                  .error_outline);
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
                                                       SizedBox(
@@ -324,7 +333,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                       .spaceBetween,
                                                               children: [
                                                                 Text(
-                                                                  "${data[index][3]}",
+                                                                  "${DateFormat.yMMMEd().format(DateTime.parse(data[index][3]))}",
                                                                   style: textStyle.copyWith(
                                                                       fontWeight:
                                                                           FontWeight
@@ -336,7 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                                 ),
                                                                 Chip(
                                                                     backgroundColor:
-                                                                        chipOrange,
+                                                                        (_differenceTime(data[index][3]) == "Selesai") ? Color(0xFF6FCF97) : chipOrange,
                                                                     label: Text(
                                                                       _differenceTime(
                                                                           data[index]
@@ -361,9 +370,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                                             },
                                           )
                                         : Center(
-                                            child: SpinKitFadingCircle(
-                                            color: Colors.blue,
-                                          ))
+                                            child: Text(
+                                                "Belum ada riwayat pemesanan, silahkan pesan layanan dokter",
+                                                textAlign: TextAlign.center))
                                     : Center(
                                         child: SpinKitFadingCircle(
                                         color: Colors.blue,
@@ -429,15 +438,14 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   String _differenceTime(time) {
-    int result =  DateTime.parse(time).difference(DateTime.now()).inDays;
+    var parsedDate = DateTime.parse(time);
+    int result = parsedDate.difference(DateTime.now()).inDays;
 
-    if (result > 0) {
+    if (result < 0) {
       return "Selesai";
-    }
-    else if (result < 0){
-      return "${0 - (result)} Hari Lagi";
-    }
-    else {
+    } else if (result > 0) {
+      return "$result Hari Lagi";
+    } else {
       return "Hari ini";
     }
   }

@@ -45,7 +45,6 @@ class _BookingConfirmState extends State<BookingConfirm> {
 
   final TextEditingController pesanController = TextEditingController();
 
-
   @override
   void dispose() {
     super.dispose();
@@ -102,7 +101,9 @@ class _BookingConfirmState extends State<BookingConfirm> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "dr " + "${widget.namaDokter.first} " + "${widget.namaDokter.last}",
+                        "dr " +
+                            "${widget.namaDokter.first} " +
+                            "${widget.namaDokter.last}",
                         style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -175,7 +176,7 @@ class _BookingConfirmState extends State<BookingConfirm> {
                                                               'pasienAktif'),
                                                         )));
 
-                                              setState(() {});
+                                            setState(() {});
                                           },
                                           child: Text(
                                             "Ganti Pasien",
@@ -249,7 +250,9 @@ class _BookingConfirmState extends State<BookingConfirm> {
                             // "Jumat, 23 Oct 2020",
                             // DateFormat("EEEE", "id_ID").format(DateTime.now()),
                             // DateFormat.yMMMEd().format(DateTime.now()),
-                            _dateTime == null ? "Pilih tanggal ->" : DateFormat.yMMMEd().format(_dateTime),
+                            _dateTime == null
+                                ? "Pilih tanggal ->"
+                                : DateFormat.yMMMEd().format(_dateTime),
                             style: GoogleFonts.poppins(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -259,16 +262,20 @@ class _BookingConfirmState extends State<BookingConfirm> {
                           SizedBox(width: 15),
                           GestureDetector(
                             onTap: () => showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2020),
-                              lastDate: DateTime(2021)).then((date) {
-                                setState(() {
-                                  _dateTime = date;
-                                });
-                              }),
-                            child: SvgPicture.asset("assets/icons/calendar_blue.svg",
-                                width: 24, height: 24, fit: BoxFit.cover),
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2020),
+                                    lastDate: DateTime(2021))
+                                .then((date) {
+                              setState(() {
+                                _dateTime = date;
+                              });
+                            }),
+                            child: SvgPicture.asset(
+                                "assets/icons/calendar_blue.svg",
+                                width: 24,
+                                height: 24,
+                                fit: BoxFit.cover),
                           )
                         ],
                       )
@@ -334,31 +341,49 @@ class _BookingConfirmState extends State<BookingConfirm> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
           child: RaisedButton(
             color: blueTitleDoktor,
-            onPressed: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
+            onPressed: (_dateTime == null)
+                ? null
+                : () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
 
-              List<String> listDokter = prefs.getStringList('listDokter');
-              List<String> listSpesialis = prefs.getStringList('listSpesialis');
-              List<String> listFoto = prefs.getStringList('listFoto');
-              List<String> listDate = prefs.getStringList('listDate');
+                    // prefs.remove("listDokter");
+                    // prefs.remove("listSpesialis");
+                    // prefs.remove("listFoto");
+                    // prefs.remove("listDate");
 
-              listDokter.add(widget.namaDokter);
-              listSpesialis.add(widget.spesialis);
-              listFoto.add(widget.fotoDokter);
-              listDate.add(_dateTime.toString());
+                    List<String> listDokter =
+                        prefs.getStringList('listDokter') ?? [];
+                    List<String> listSpesialis =
+                        prefs.getStringList('listSpesialis') ?? [];
+                    List<String> listFoto =
+                        prefs.getStringList('listFoto') ?? [];
+                    List<String> listDate =
+                        prefs.getStringList('listDate') ?? [];
 
-              prefs.remove("listDokter");
-              prefs.remove("listSpesialis");
-              prefs.remove("listFoto");
-              prefs.remove("listDate");
+                    listDokter.add("dr. " +
+                        widget.namaDokter.first +
+                        " " +
+                        widget.namaDokter.last);
+                    listSpesialis.add(widget.spesialis);
+                    listFoto.add(widget.fotoDokter);
+                    listDate.add(_dateTime.toString());
 
-              prefs.setStringList('listDokter', listDokter);
-              prefs.setStringList('listSpesialis', listSpesialis);
-              prefs.setStringList('listFoto', listFoto);
-              prefs.setStringList('listDate', listFoto);
+                    // prefs.remove("listDokter");
+                    // prefs.remove("listSpesialis");
+                    // prefs.remove("listFoto");
+                    // prefs.remove("listDate");
 
-              Navigator.push(context, MaterialPageRoute(builder: (context) => BookingSukses()));
-            },
+                    prefs.setStringList('listDokter', listDokter);
+                    prefs.setStringList('listSpesialis', listSpesialis);
+                    prefs.setStringList('listFoto', listFoto);
+                    prefs.setStringList('listDate', listDate);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BookingSukses()));
+                  },
             child: Text(
               "Konfirmasi",
               style: GoogleFonts.poppins(
