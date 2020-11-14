@@ -297,6 +297,8 @@ class _DoktorScreenState extends State<DoktorScreen> {
                 setState(() {
                   _loadingBuatJanji = true;
                 });
+                prefs.remove('pasienAktif');
+                prefs.setInt("pasienAktif", 0);
                 _loadingBuatJanji = await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -309,7 +311,9 @@ class _DoktorScreenState extends State<DoktorScreen> {
                               spesialis: widget.dokter.workingAs,
                               fotoDokter: widget.dokter.picture,
                               status: prefs.getStringList('status')[0],
+                              pasienAktif: prefs.getInt('pasienAktif'),
                             )));
+                setState(() {});
               } else {
                 _settingModalBottomSheet(
                     context,
@@ -661,12 +665,14 @@ void _settingModalBottomSheet(
                                                     "gender", [character]);
                                                 prefs.setStringList(
                                                     "status", ["Saya Sendiri"]);
+                                                prefs.setInt('pasienAktif', 0);
                                               } else {
                                                 prefs.remove('email');
                                                 prefs.remove('noHp');
                                                 prefs.remove('nama');
                                                 prefs.remove("gender");
                                                 prefs.remove("status");
+                                                prefs.remove("pasienAktif");
 
                                                 prefs.setString(
                                                     "email", email.text);
@@ -678,6 +684,7 @@ void _settingModalBottomSheet(
                                                     "gender", [character]);
                                                 prefs.setStringList(
                                                     "status", ["Saya Sendiri"]);
+                                                prefs.setInt('pasienAktif', 0);
                                               }
 
                                               loading = await Navigator.push(
@@ -685,16 +692,18 @@ void _settingModalBottomSheet(
                                                   MaterialPageRoute(
                                                       builder: (_) =>
                                                           BookingConfirm(
-                                                              nama: name.text,
-                                                              gender: character,
-                                                              hp: noHp.text,
-                                                              email: email.text,
-                                                              namaDokter:
-                                                                  doctorName,
-                                                              spesialis:
-                                                                  specialist,
-                                                              fotoDokter:
-                                                                  doctorPicture)));
+                                                            nama: name.text,
+                                                            gender: character,
+                                                            hp: noHp.text,
+                                                            email: email.text,
+                                                            namaDokter:
+                                                                doctorName,
+                                                            spesialis:
+                                                                specialist,
+                                                            fotoDokter:
+                                                                doctorPicture,
+                                                            pasienAktif: 0,
+                                                          )));
                                             },
                                       color: blueTitleDoktor,
                                       elevation: 0,

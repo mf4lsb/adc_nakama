@@ -8,6 +8,10 @@ import '../color_palette.dart';
 // enum SingingCharacter { pria, wanita, none }
 
 class GantiPasien extends StatefulWidget {
+
+  final int id;
+  GantiPasien({Key key, this.id = 0}) : super(key: key);
+
   @override
   _GantiPasienState createState() => _GantiPasienState();
 }
@@ -23,6 +27,7 @@ class _GantiPasienState extends State<GantiPasien> {
   String _selectedDropdownValue = "";
 
   bool _btnEnabled = false;
+  bool _loading = false;
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
@@ -31,6 +36,15 @@ class _GantiPasienState extends State<GantiPasien> {
   String _valStatus;
 
   List _status = ["Tetangga", "Anak", "Istri", "Keluarga"];
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _loading = false;
+      id = widget.id;
+    });
+  }
 
   @override
   void dispose() {
@@ -120,7 +134,10 @@ class _GantiPasienState extends State<GantiPasien> {
                                     Radio(
                                       value: index,
                                       groupValue: id,
-                                      onChanged: (val) {
+                                      onChanged: (val) async {
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                                        prefs.remove('pasienAktif');
+                                        prefs.setInt("pasienAktif", index);
                                         setState(() {
                                           id = index;
                                           _selectedRadioIndex = val;
@@ -224,9 +241,10 @@ class _GantiPasienState extends State<GantiPasien> {
                                     color: textSubTitleCard2),
                               ),
                               Container(
-                                height: 60,
+                                // height: 40,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                                 child: TextFormField(
                                   controller: nameController,
                                   validator: (value) {
@@ -239,18 +257,20 @@ class _GantiPasienState extends State<GantiPasien> {
                                       border: OutlineInputBorder(),
                                       hintText: "Nama",
                                       helperText: "",
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 10),
                                       hintStyle: GoogleFonts.poppins(
-                                          color: subtitleList,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1),
+                                        color: subtitleList,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                       focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                               color: Colors.blue))),
                                 ),
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               Text(
                                 "Jenis Kelamin*",
@@ -382,42 +402,62 @@ class _GantiPasienState extends State<GantiPasien> {
                                         MediaQuery.of(context).size.width / 2.4,
                                     height: 44,
                                     child: RaisedButton(
-                                      onPressed: (_btnEnabled == false ||
-                                              _character == "none" ||
-                                              _selectedDropdownValue == "")
-                                          ? null
-                                          : () async {
-                                            SharedPreferences prefs = await SharedPreferences.getInstance();
-                                            List<String> listNama = prefs.getStringList('nama');
-                                            List<String> listGender = prefs.getStringList('gender');
-                                            List<String> listStatus = prefs.getStringList('status');
+                                        onPressed: (_btnEnabled == false ||
+                                                _character == "none" ||
+                                                _selectedDropdownValue == "")
+                                            ? null
+                                            : () async {
+                                                setState(() {
+                                                  _loading = true;
+                                                });
+                                                SharedPreferences prefs =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                List<String> listNama =
+                                                    prefs.getStringList('nama');
+                                                List<String> listGender = prefs
+                                                    .getStringList('gender');
+                                                List<String> listStatus = prefs
+                                                    .getStringList('status');
 
-                                            listNama.add(nameController.text);
-                                            listGender.add(_character);
-                                            listStatus.add(_selectedDropdownValue);
+                                                listNama
+                                                    .add(nameController.text);
+                                                listGender.add(_character);
+                                                listStatus.add(
+                                                    _selectedDropdownValue);
 
-                                            prefs.remove("nama");
-                                            prefs.remove("gender");
-                                            prefs.remove("status");
+                                                prefs.remove("nama");
+                                                prefs.remove("gender");
+                                                prefs.remove("status");
 
-                                            prefs.setStringList("nama", listNama);
-                                            prefs.setStringList("gender", listGender);
-                                            prefs.setStringList("status", listStatus);
+                                                prefs.setStringList(
+                                                    "nama", listNama);
+                                                prefs.setStringList(
+                                                    "gender", listGender);
+                                                prefs.setStringList(
+                                                    "status", listStatus);
 
-                                          },
-                                      color: blueTitleDoktor,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(7)),
-                                      child: Text(
-                                        "Daftar",
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14),
-                                      ),
-                                    ),
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            GantiPasien()));
+                                              },
+                                        color: blueTitleDoktor,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(7)),
+                                        child: (_loading == false)
+                                            ? Text(
+                                                "Daftar",
+                                                style: GoogleFonts.poppins(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 14),
+                                              )
+                                            : SpinKitFadingCircle(
+                                                color: Colors.blue)),
                                   )
                                 ],
                               )

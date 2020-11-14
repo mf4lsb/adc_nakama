@@ -29,7 +29,9 @@ dependencies:
   flutter_spinkit: ^4.1.2
   flutter_svg: ^0.19.1
   google_fonts: ^1.1.1
+  intl: ^0.16.1
   shared_preferences: ^0.5.12+2
+  datetime_picker_formfield: ^1.0.0
 
 dev_dependencies:
   flutter_test:

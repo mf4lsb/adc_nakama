@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 import '../color_palette.dart';
+import 'booking_sukses.dart';
 import 'ganti_pasien_screen.dart';
 
-class BookingConfirm extends StatelessWidget {
+class BookingConfirm extends StatefulWidget {
   final String nama;
   final dynamic gender;
   final String hp;
@@ -16,6 +20,7 @@ class BookingConfirm extends StatelessWidget {
   final dynamic namaDokter;
   final dynamic spesialis;
   final dynamic fotoDokter;
+  final int pasienAktif;
   BookingConfirm(
       {Key key,
       this.nama,
@@ -25,10 +30,28 @@ class BookingConfirm extends StatelessWidget {
       this.status = "Saya Sendiri",
       this.namaDokter,
       this.spesialis,
-      this.fotoDokter})
+      this.fotoDokter,
+      this.pasienAktif})
       : super(key: key);
 
+  @override
+  _BookingConfirmState createState() => _BookingConfirmState();
+}
+
+class _BookingConfirmState extends State<BookingConfirm> {
   final _formKey = GlobalKey<FormState>();
+
+  DateTime _dateTime;
+
+  final TextEditingController pesanController = TextEditingController();
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    pesanController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +82,7 @@ class BookingConfirm extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: CachedNetworkImage(
-                      imageUrl: fotoDokter,
+                      imageUrl: widget.fotoDokter,
                       width: 58,
                       height: 58,
                       fit: BoxFit.cover,
@@ -79,7 +102,7 @@ class BookingConfirm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "dr " + "${namaDokter.first} " + "${namaDokter.last}",
+                        "dr " + "${widget.namaDokter.first} " + "${widget.namaDokter.last}",
                         style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -87,7 +110,7 @@ class BookingConfirm extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        "$spesialis",
+                        "${widget.spesialis}",
                         style: GoogleFonts.poppins(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -115,67 +138,95 @@ class BookingConfirm extends StatelessWidget {
                     letterSpacing: 0.24),
               ),
             ),
-            Container(
-              color: Color(0xFFF4F4F4),
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Booking Untuk",
-                        style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: textTitleCard2,
-                            letterSpacing: 0.24),
-                      ),
-                      InkWell(
-                          onTap: () => Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => GantiPasien())),
-                          child: Text(
-                            "Ganti Pasien",
-                            style: GoogleFonts.poppins(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                                color: blueTitleDoktor,
-                                letterSpacing: 0.24),
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    "Nama : $nama",
-                    style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF8B8B8B),
-                        letterSpacing: 0.24),
-                  ),
-                  Text(
-                    "Jenis Kelamin : $gender",
-                    style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF8B8B8B),
-                        letterSpacing: 0.24),
-                  ),
-                  Text(
-                    "Status : $status",
-                    style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF8B8B8B),
-                        letterSpacing: 0.24),
-                  ),
-                  //* End Booking Detail
-                ],
-              ),
-            ),
+            FutureBuilder(
+                future: _getPasienAktif(),
+                builder: (context, snapshot) {
+                  dynamic data = snapshot.data;
+                  return (snapshot.hasData)
+                      ? (snapshot.data != null)
+                          ? Container(
+                              color: Color(0xFFF4F4F4),
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Booking Untuk",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: textTitleCard2,
+                                            letterSpacing: 0.24),
+                                      ),
+                                      InkWell(
+                                          onTap: () async {
+                                            SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) => GantiPasien(
+                                                          id: prefs.getInt(
+                                                              'pasienAktif'),
+                                                        )));
+
+                                              setState(() {});
+                                          },
+                                          child: Text(
+                                            "Ganti Pasien",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                                color: blueTitleDoktor,
+                                                letterSpacing: 0.24),
+                                          ))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    "Nama : ${data[0]}",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF8B8B8B),
+                                        letterSpacing: 0.24),
+                                  ),
+                                  Text(
+                                    "Jenis Kelamin : ${data[1]}",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF8B8B8B),
+                                        letterSpacing: 0.24),
+                                  ),
+                                  Text(
+                                    "Status : ${data[2]}",
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF8B8B8B),
+                                        letterSpacing: 0.24),
+                                  ),
+                                  //* End Booking Detail
+                                ],
+                              ),
+                            )
+                          : Center(
+                              child: SpinKitFadingCircle(
+                              color: Colors.blue,
+                            ))
+                      : Center(
+                          child: SpinKitFadingCircle(
+                          color: Colors.blue,
+                        ));
+                }),
             //* Tanggal Booking dan Pesan
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -195,7 +246,10 @@ class BookingConfirm extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "Jumat, 23 Oct 2020",
+                            // "Jumat, 23 Oct 2020",
+                            // DateFormat("EEEE", "id_ID").format(DateTime.now()),
+                            // DateFormat.yMMMEd().format(DateTime.now()),
+                            _dateTime == null ? "Pilih tanggal ->" : DateFormat.yMMMEd().format(_dateTime),
                             style: GoogleFonts.poppins(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -203,8 +257,19 @@ class BookingConfirm extends StatelessWidget {
                                 letterSpacing: 0.24),
                           ),
                           SizedBox(width: 15),
-                          SvgPicture.asset("assets/icons/calendar_blue.svg",
-                              width: 24, height: 24, fit: BoxFit.cover)
+                          GestureDetector(
+                            onTap: () => showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2020),
+                              lastDate: DateTime(2021)).then((date) {
+                                setState(() {
+                                  _dateTime = date;
+                                });
+                              }),
+                            child: SvgPicture.asset("assets/icons/calendar_blue.svg",
+                                width: 24, height: 24, fit: BoxFit.cover),
+                          )
                         ],
                       )
                     ],
@@ -225,6 +290,7 @@ class BookingConfirm extends StatelessWidget {
                               color: textSubTitleCard2),
                         ),
                         TextFormField(
+                          controller: pesanController,
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.only(
                                   top: 12, left: 16, bottom: 58),
@@ -268,7 +334,31 @@ class BookingConfirm extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
           child: RaisedButton(
             color: blueTitleDoktor,
-            onPressed: () {},
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
+              List<String> listDokter = prefs.getStringList('listDokter');
+              List<String> listSpesialis = prefs.getStringList('listSpesialis');
+              List<String> listFoto = prefs.getStringList('listFoto');
+              List<String> listDate = prefs.getStringList('listDate');
+
+              listDokter.add(widget.namaDokter);
+              listSpesialis.add(widget.spesialis);
+              listFoto.add(widget.fotoDokter);
+              listDate.add(_dateTime.toString());
+
+              prefs.remove("listDokter");
+              prefs.remove("listSpesialis");
+              prefs.remove("listFoto");
+              prefs.remove("listDate");
+
+              prefs.setStringList('listDokter', listDokter);
+              prefs.setStringList('listSpesialis', listSpesialis);
+              prefs.setStringList('listFoto', listFoto);
+              prefs.setStringList('listDate', listFoto);
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) => BookingSukses()));
+            },
             child: Text(
               "Konfirmasi",
               style: GoogleFonts.poppins(
@@ -281,5 +371,15 @@ class BookingConfirm extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<List<String>> _getPasienAktif() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String nama = prefs.getStringList('nama')[prefs.getInt('pasienAktif')];
+    String gender = prefs.getStringList('gender')[prefs.getInt('pasienAktif')];
+    String status = prefs.getStringList('status')[prefs.getInt('pasienAktif')];
+
+    return [nama, gender, status];
   }
 }

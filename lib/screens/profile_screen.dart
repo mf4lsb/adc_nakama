@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adc_nakama/color_palette.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail_screen.dart';
 
@@ -74,11 +77,26 @@ class _ProfileScreenState extends State<ProfileScreen>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Irfan Trianto", style: textStyle,),
-                        SizedBox(height: 4,),
-                        Text("Laki - Laki", style: textStyle.copyWith(color: textSubTitleCard2, fontSize: 12),),
-                        SizedBox(height: 4,),
-                        Text("0895351577557", style: textStyle.copyWith(color: textSubTitleCard1, fontSize: 12),),
+                        Text(
+                          "Irfan Trianto",
+                          style: textStyle,
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          "Laki - Laki",
+                          style: textStyle.copyWith(
+                              color: textSubTitleCard2, fontSize: 12),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text(
+                          "0895351577557",
+                          style: textStyle.copyWith(
+                              color: textSubTitleCard1, fontSize: 12),
+                        ),
                       ],
                     ),
                     Container(
@@ -133,11 +151,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                       child: TabBarView(
                         controller: _tabController,
                         children: [
+                          //* Notifikasi
                           ListView.builder(
                             itemCount: 10,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => DetailScreen())),
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => DetailScreen())),
                                 child: Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 12),
@@ -167,7 +189,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                               Text(
                                                 "Ingat Jadwal kontrol rutin mingguan anda dengan dr. Sandy Sucipto hari selasa",
                                                 style: textStyle.copyWith(
-                                                    fontWeight: FontWeight.normal,
+                                                    fontWeight:
+                                                        FontWeight.normal,
                                                     color: Color(0xFF3C4249),
                                                     fontSize: 12),
                                                 overflow: TextOverflow.fade,
@@ -185,7 +208,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                     style: textStyle.copyWith(
                                                         fontWeight:
                                                             FontWeight.normal,
-                                                        color: Color(0xFFA6A6A6),
+                                                        color:
+                                                            Color(0xFFA6A6A6),
                                                         fontSize: 13),
                                                   ),
                                                   Chip(
@@ -197,7 +221,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                                           color: Colors.white,
                                                           fontSize: 12),
                                                     ),
-                                                    backgroundColor: chipOrange2,
+                                                    backgroundColor:
+                                                        chipOrange2,
                                                   )
                                                 ],
                                               )
@@ -209,79 +234,141 @@ class _ProfileScreenState extends State<ProfileScreen>
                               );
                             },
                           ),
-                          ListView.builder(
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 12),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            color: blueTitleDoktor
-                                                .withOpacity(0.1)),
-                                        width: 48,
-                                        height: 48,
-                                      ),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Dokter 1", style: textStyle),
-                                            Text(
-                                              "Umum",
-                                              style: textStyle.copyWith(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color(0xFF3C4249),
-                                                  fontSize: 12),
-                                              overflow: TextOverflow.fade,
-                                            ),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "2 jam yang lalu",
-                                                  style: textStyle.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color: Color(0xFFA6A6A6),
-                                                      fontSize: 13),
-                                                ),
-                                                Chip(
-                                                    backgroundColor: chipOrange,
-                                                    label: Text(
-                                                      "2 Hari Lagi",
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  Colors.white),
-                                                    )),
-                                                // child: Text("2 Hari Lagi"))
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ));
-                            },
-                          ),
+
+                          //* History Booking
+                          FutureBuilder(
+                              future: _getHistoryBooking(),
+                              builder: (context, snapshot) {
+                                dynamic data = snapshot.data;
+                                return (snapshot.hasData)
+                                    ? (snapshot.data != null)
+                                        ? ListView.builder(
+                                            itemCount: 10,
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 12),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
+                                                            color:
+                                                                blueTitleDoktor
+                                                                    .withOpacity(
+                                                                        0.1)),
+                                                        width: 48,
+                                                        height: 48,
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: data[index]
+                                                              [2],
+                                                          fit: BoxFit.cover,
+                                                          placeholder: (BuildContext
+                                                                      context,
+                                                                  String url) =>
+                                                              Center(
+                                                                  child:
+                                                                      SpinKitFadingCircle(
+                                                            color: Colors.blue,
+                                                          )),
+                                                          errorWidget:
+                                                              (BuildContext
+                                                                      context,
+                                                                  String url,
+                                                                  dynamic
+                                                                      error) {
+                                                            print(error);
+                                                            return Icon(Icons
+                                                                .error_outline);
+                                                          },
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 12,
+                                                      ),
+                                                      Expanded(
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                "${data[index][0]}",
+                                                                style:
+                                                                    textStyle),
+                                                            Text(
+                                                              "${data[index][1]}",
+                                                              style: textStyle.copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  color: Color(
+                                                                      0xFF3C4249),
+                                                                  fontSize: 12),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .fade,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 6,
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  "${data[index][3]}",
+                                                                  style: textStyle.copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal,
+                                                                      color: Color(
+                                                                          0xFFA6A6A6),
+                                                                      fontSize:
+                                                                          13),
+                                                                ),
+                                                                Chip(
+                                                                    backgroundColor:
+                                                                        chipOrange,
+                                                                    label: Text(
+                                                                      _differenceTime(
+                                                                          data[index]
+                                                                              [
+                                                                              3]),
+                                                                      style: GoogleFonts.poppins(
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontWeight: FontWeight
+                                                                              .w600,
+                                                                          color:
+                                                                              Colors.white),
+                                                                    )),
+                                                                // child: Text("2 Hari Lagi"))
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ));
+                                            },
+                                          )
+                                        : Center(
+                                            child: SpinKitFadingCircle(
+                                            color: Colors.blue,
+                                          ))
+                                    : Center(
+                                        child: SpinKitFadingCircle(
+                                        color: Colors.blue,
+                                      ));
+                              }),
                         ],
                       ),
                     )
@@ -322,6 +409,36 @@ class _ProfileScreenState extends State<ProfileScreen>
       return Colors.white;
     } else {
       return greyButtonDoktor;
+    }
+  }
+
+  Future<List<List<String>>> _getHistoryBooking() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> listDokter = prefs.getStringList('listDokter');
+    List<String> listSpesialis = prefs.getStringList('listSpesialis');
+    List<String> listFoto = prefs.getStringList('listFoto');
+    List<String> listDate = prefs.getStringList('listDate');
+    List<List<String>> result = [];
+
+    for (var i = 0; i < listDokter.length; i++) {
+      result.add([listDokter[i], listSpesialis[i], listFoto[i], listDate[i]]);
+    }
+
+    return result;
+  }
+
+  String _differenceTime(time) {
+    int result =  DateTime.parse(time).difference(DateTime.now()).inDays;
+
+    if (result > 0) {
+      return "Selesai";
+    }
+    else if (result < 0){
+      return "${0 - (result)} Hari Lagi";
+    }
+    else {
+      return "Hari ini";
     }
   }
 }
