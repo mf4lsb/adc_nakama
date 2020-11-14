@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../color_palette.dart';
 
-enum SingingCharacter { pria, wanita, none }
+// enum SingingCharacter { pria, wanita, none }
 
 class GantiPasien extends StatefulWidget {
   @override
@@ -14,16 +16,42 @@ class _GantiPasienState extends State<GantiPasien> {
   final TextStyle textStyle = GoogleFonts.poppins(
       color: textTitleCard2, fontSize: 18, fontWeight: FontWeight.w600);
 
-  int id = 1;
+  int id = 0;
 
   int _selectedRadioIndex;
 
-  final _formKey = GlobalKey<FormState>();
+  String _selectedDropdownValue = "";
 
-  SingingCharacter _character = SingingCharacter.none;
+  bool _btnEnabled = false;
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+
+  String _character = "none";
   String _valStatus;
 
-  List _status = ["Saya Sendiri", "Anak"];
+  List _status = ["Tetangga", "Anak", "Istri", "Keluarga"];
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+  }
+
+  Future<List<List<String>>> getPasien() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> listNama = prefs.getStringList("nama");
+    List<String> listGender = prefs.getStringList("gender");
+    List<String> listStatus = prefs.getStringList("status");
+    List<List<String>> result = [];
+
+    for (var i = 0; i < listNama.length; i++) {
+      result.add([listNama[i], listGender[i], listStatus[i]]);
+    }
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,58 +68,77 @@ class _GantiPasienState extends State<GantiPasien> {
       body: ListView(
         children: [
           SizedBox(height: 1),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                      border: Border.symmetric(
-                          horizontal: BorderSide(color: Color(0xFFF0F0F0)))),
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 19),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Nama: Irfan Trianto",
-                            style: textStyle.copyWith(
-                                color: Color(0xFF8B8B8B),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0.24),
-                          ),
-                          Text("Jenis Kelamin: Laki-Laki",
-                              style: textStyle.copyWith(
-                                  color: Color(0xFF8B8B8B),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.24)),
-                          Text("Status: Saya Sendiri",
-                              style: textStyle.copyWith(
-                                  color: Color(0xFF8B8B8B),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.24)),
-                        ],
-                      ),
-                      Radio(
-                        value: index,
-                        groupValue: id,
-                        onChanged: (val) {
-                          setState(() {
-                            id = index;
-                            _selectedRadioIndex = val;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                );
+          FutureBuilder(
+              future: getPasien(),
+              builder: (context, snapshot) {
+                dynamic data = snapshot.data;
+                return (snapshot.hasData)
+                    ? (snapshot.data != null)
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                    border: Border.symmetric(
+                                        horizontal: BorderSide(
+                                            color: Color(0xFFF0F0F0)))),
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 19),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Nama: ${data[index][0]}",
+                                          style: textStyle.copyWith(
+                                              color: Color(0xFF8B8B8B),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              letterSpacing: 0.24),
+                                        ),
+                                        Text("Jenis Kelamin: ${data[index][1]}",
+                                            style: textStyle.copyWith(
+                                                color: Color(0xFF8B8B8B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                letterSpacing: 0.24)),
+                                        Text("Status: ${data[index][2]}",
+                                            style: textStyle.copyWith(
+                                                color: Color(0xFF8B8B8B),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                                letterSpacing: 0.24)),
+                                      ],
+                                    ),
+                                    Radio(
+                                      value: index,
+                                      groupValue: id,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          id = index;
+                                          _selectedRadioIndex = val;
+                                        });
+                                      },
+                                    )
+                                  ],
+                                ),
+                              );
+                            })
+                        : Center(
+                            child: SpinKitFadingCircle(
+                            color: Colors.blue,
+                          ))
+                    : Center(
+                        child: SpinKitFadingCircle(
+                        color: Colors.blue,
+                      ));
               }),
           SizedBox(height: 12),
           Center(
@@ -163,6 +210,9 @@ class _GantiPasienState extends State<GantiPasien> {
                         ),
                         Form(
                           key: _formKey,
+                          onChanged: () => mystate(() =>
+                              _btnEnabled = _formKey.currentState.validate()),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -178,6 +228,13 @@ class _GantiPasienState extends State<GantiPasien> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8)),
                                 child: TextFormField(
+                                  controller: nameController,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Anda tidak dapat mengkosongkan ini!";
+                                    }
+                                    return null;
+                                  },
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       hintText: "Nama",
@@ -210,9 +267,9 @@ class _GantiPasienState extends State<GantiPasien> {
                                     child: Radio(
                                       materialTapTargetSize:
                                           MaterialTapTargetSize.shrinkWrap,
-                                      value: SingingCharacter.pria,
+                                      value: "Laki Laki",
                                       groupValue: _character,
-                                      onChanged: (SingingCharacter value) {
+                                      onChanged: (String value) {
                                         mystate(() {
                                           _character = value;
                                         });
@@ -224,8 +281,7 @@ class _GantiPasienState extends State<GantiPasien> {
                                     style: GoogleFonts.poppins(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
-                                        color: (_character !=
-                                                SingingCharacter.pria)
+                                        color: (_character != "Laki Laki")
                                             ? subtitleList
                                             : Colors.black),
                                   ),
@@ -235,9 +291,9 @@ class _GantiPasienState extends State<GantiPasien> {
                                   Radio(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
-                                    value: SingingCharacter.wanita,
+                                    value: "Perempuan",
                                     groupValue: _character,
-                                    onChanged: (SingingCharacter value) {
+                                    onChanged: (String value) {
                                       mystate(() {
                                         _character = value;
                                       });
@@ -248,8 +304,7 @@ class _GantiPasienState extends State<GantiPasien> {
                                     style: GoogleFonts.poppins(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
-                                        color: (_character !=
-                                                SingingCharacter.wanita)
+                                        color: (_character != "Perempuan")
                                             ? subtitleList
                                             : Colors.black),
                                   ),
@@ -266,10 +321,17 @@ class _GantiPasienState extends State<GantiPasien> {
                                     color: textSubTitleCard2),
                               ),
                               Container(
+                                width: MediaQuery.of(context).size.width,
                                 height: 60,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                                 child: DropdownButton(
-                                  hint: Text("Pilih salah satu"),
+                                  hint: Text(
+                                    "Pilih salah satu",
+                                    style: GoogleFonts.poppins(
+                                        color: Color(0xFFB8BCC6), fontSize: 12),
+                                  ),
                                   value: _valStatus,
                                   items: _status.map((value) {
                                     return DropdownMenuItem(
@@ -280,11 +342,14 @@ class _GantiPasienState extends State<GantiPasien> {
                                   onChanged: (value) {
                                     mystate(() {
                                       _valStatus = value;
+                                      _selectedDropdownValue = value;
                                     });
                                   },
                                 ),
                               ),
-                              SizedBox(height: 27,),
+                              SizedBox(
+                                height: 27,
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -317,7 +382,29 @@ class _GantiPasienState extends State<GantiPasien> {
                                         MediaQuery.of(context).size.width / 2.4,
                                     height: 44,
                                     child: RaisedButton(
-                                      onPressed: () {},
+                                      onPressed: (_btnEnabled == false ||
+                                              _character == "none" ||
+                                              _selectedDropdownValue == "")
+                                          ? null
+                                          : () async {
+                                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                                            List<String> listNama = prefs.getStringList('nama');
+                                            List<String> listGender = prefs.getStringList('gender');
+                                            List<String> listStatus = prefs.getStringList('status');
+
+                                            listNama.add(nameController.text);
+                                            listGender.add(_character);
+                                            listStatus.add(_selectedDropdownValue);
+
+                                            prefs.remove("nama");
+                                            prefs.remove("gender");
+                                            prefs.remove("status");
+
+                                            prefs.setStringList("nama", listNama);
+                                            prefs.setStringList("gender", listGender);
+                                            prefs.setStringList("status", listStatus);
+
+                                          },
                                       color: blueTitleDoktor,
                                       elevation: 0,
                                       shape: RoundedRectangleBorder(

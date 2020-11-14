@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,6 +8,26 @@ import '../color_palette.dart';
 import 'ganti_pasien_screen.dart';
 
 class BookingConfirm extends StatelessWidget {
+  final String nama;
+  final dynamic gender;
+  final String hp;
+  final String email;
+  final String status;
+  final dynamic namaDokter;
+  final dynamic spesialis;
+  final dynamic fotoDokter;
+  BookingConfirm(
+      {Key key,
+      this.nama,
+      this.gender,
+      this.hp,
+      this.email,
+      this.status = "Saya Sendiri",
+      this.namaDokter,
+      this.spesialis,
+      this.fotoDokter})
+      : super(key: key);
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -14,6 +36,10 @@ class BookingConfirm extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
         // leading: Icon(Icons.arrow_back),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context, false),
+        ),
         iconTheme: IconThemeData(color: textTitleCard2),
         title: Text(
           "Booking Confirm",
@@ -31,19 +57,29 @@ class BookingConfirm extends StatelessWidget {
               child: Row(
                 children: [
                   ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.network(
-                        "https://awsimages.detik.net.id/community/media/visual/2016/12/20/56bebe68-da59-461d-b55a-491d598b71d5_43.jpg?w=700&q=90",
-                        width: 58,
-                        height: 58,
-                        fit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(100),
+                    child: CachedNetworkImage(
+                      imageUrl: fotoDokter,
+                      width: 58,
+                      height: 58,
+                      fit: BoxFit.cover,
+                      placeholder: (BuildContext context, String url) => Center(
+                          child: SpinKitFadingCircle(
+                        color: Colors.blue,
                       )),
+                      errorWidget:
+                          (BuildContext context, String url, dynamic error) {
+                        print(error);
+                        return Icon(Icons.error_outline);
+                      },
+                    ),
+                  ),
                   SizedBox(width: 24),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Dokter 1",
+                        "dr " + "${namaDokter.first} " + "${namaDokter.last}",
                         style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -51,7 +87,7 @@ class BookingConfirm extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        "Umum",
+                        "$spesialis",
                         style: GoogleFonts.poppins(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -113,7 +149,7 @@ class BookingConfirm extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    "Nama : Irfan Trianto",
+                    "Nama : $nama",
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -121,7 +157,7 @@ class BookingConfirm extends StatelessWidget {
                         letterSpacing: 0.24),
                   ),
                   Text(
-                    "Jenis Kelamin : Laki Laki",
+                    "Jenis Kelamin : $gender",
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -129,7 +165,7 @@ class BookingConfirm extends StatelessWidget {
                         letterSpacing: 0.24),
                   ),
                   Text(
-                    "Status : Saya Sendiri",
+                    "Status : $status",
                     style: GoogleFonts.poppins(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -174,7 +210,7 @@ class BookingConfirm extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 18,
+                    height: 25,
                   ),
                   Form(
                     key: _formKey,
@@ -190,8 +226,11 @@ class BookingConfirm extends StatelessWidget {
                         ),
                         TextFormField(
                           decoration: InputDecoration(
-                              contentPadding: EdgeInsets.only(top: 12, left: 16, bottom: 58),
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFFE0E0E0))),
+                              contentPadding: EdgeInsets.only(
+                                  top: 12, left: 16, bottom: 58),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFFE0E0E0))),
                               hintText: "Pesan",
                               helperText: "",
                               hintStyle: GoogleFonts.poppins(

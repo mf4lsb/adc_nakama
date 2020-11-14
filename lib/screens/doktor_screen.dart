@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../color_palette.dart';
 import 'booking_confirm_screen.dart';
 
-enum SingingCharacter { pria, wanita, none }
+// enum SingingCharacter { pria, wanita, none }
 
 class DoktorScreen extends StatefulWidget {
   final dynamic dokter;
@@ -25,8 +26,11 @@ class _DoktorScreenState extends State<DoktorScreen> {
   final TextEditingController noHpController = TextEditingController();
 
   bool _btnEnabled = false;
+  bool _loading = false;
+  bool _loadingBuatJanji = false;
 
-  SingingCharacter _character = SingingCharacter.none;
+  // SingingCharacter _character = SingingCharacter.none;
+  String _character = "none";
 
   @override
   void dispose() {
@@ -286,16 +290,53 @@ class _DoktorScreenState extends State<DoktorScreen> {
         child: ButtonTheme(
           height: 44,
           child: RaisedButton(
-            onPressed: () => _settingModalBottomSheet(context, _formKey,
-                _character, nameController, emailController, noHpController, _btnEnabled),
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+
+              if (prefs.getString('email') != null) {
+                setState(() {
+                  _loadingBuatJanji = true;
+                });
+                _loadingBuatJanji = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => BookingConfirm(
+                              nama: prefs.getStringList('nama')[0],
+                              gender: prefs.getStringList("gender")[0],
+                              hp: prefs.getString('noHp'),
+                              email: prefs.getString('email'),
+                              namaDokter: widget.dokter.name,
+                              spesialis: widget.dokter.workingAs,
+                              fotoDokter: widget.dokter.picture,
+                              status: prefs.getStringList('status')[0],
+                            )));
+              } else {
+                _settingModalBottomSheet(
+                    context,
+                    _formKey,
+                    _character,
+                    nameController,
+                    emailController,
+                    noHpController,
+                    _btnEnabled,
+                    _loading,
+                    widget.dokter.name,
+                    widget.dokter.workingAs,
+                    widget.dokter.picture);
+              }
+            },
             color: blueTitleDoktor,
-            child: Text(
-              "Buat Janji",
-              style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-            ),
+            child: (_loadingBuatJanji == false)
+                ? Text(
+                    "Buat Janji",
+                    style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14),
+                  )
+                : SpinKitFadingCircle(
+                    color: Colors.white,
+                  ),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
           ),
@@ -314,7 +355,17 @@ class _DoktorScreenState extends State<DoktorScreen> {
 }
 
 void _settingModalBottomSheet(
-    BuildContext context, key, SingingCharacter character, name, email, noHp, btnConditions) {
+    BuildContext context,
+    key,
+    String character,
+    name,
+    email,
+    noHp,
+    btnConditions,
+    loading,
+    doctorName,
+    specialist,
+    doctorPicture) {
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -368,7 +419,8 @@ void _settingModalBottomSheet(
                       ),
                       Form(
                         key: key,
-                        onChanged: () => mystate(() => btnConditions = key.currentState.validate()),
+                        onChanged: () => mystate(
+                            () => btnConditions = key.currentState.validate()),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -424,9 +476,9 @@ void _settingModalBottomSheet(
                                   child: Radio(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
-                                    value: SingingCharacter.pria,
+                                    value: "Laki Laki",
                                     groupValue: character,
-                                    onChanged: (SingingCharacter value) {
+                                    onChanged: (String value) {
                                       mystate(() {
                                         character = value;
                                       });
@@ -438,10 +490,9 @@ void _settingModalBottomSheet(
                                   style: GoogleFonts.poppins(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
-                                      color:
-                                          (character != SingingCharacter.pria)
-                                              ? subtitleList
-                                              : Colors.black),
+                                      color: (character != "Laki Laki")
+                                          ? subtitleList
+                                          : Colors.black),
                                 ),
                                 SizedBox(
                                   width: 34,
@@ -449,9 +500,9 @@ void _settingModalBottomSheet(
                                 Radio(
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
-                                  value: SingingCharacter.wanita,
+                                  value: "Perempuan",
                                   groupValue: character,
-                                  onChanged: (SingingCharacter value) {
+                                  onChanged: (String value) {
                                     mystate(() {
                                       character = value;
                                     });
@@ -462,10 +513,9 @@ void _settingModalBottomSheet(
                                   style: GoogleFonts.poppins(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
-                                      color:
-                                          (character != SingingCharacter.wanita)
-                                              ? subtitleList
-                                              : Colors.black),
+                                      color: (character != "Perempuan")
+                                          ? subtitleList
+                                          : Colors.black),
                                 ),
                               ],
                             ),
@@ -580,22 +630,88 @@ void _settingModalBottomSheet(
                                       MediaQuery.of(context).size.width / 2.4,
                                   height: 44,
                                   child: RaisedButton(
-                                    onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => BookingConfirm())),
-                                    color: blueTitleDoktor,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(7)),
-                                    child: Text(
-                                      "Daftar",
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14),
-                                    ),
-                                  ),
+                                      onPressed: (btnConditions == false ||
+                                              character == "none")
+                                          ? null
+                                          : () async {
+                                              mystate(() {
+                                                loading = true;
+                                              });
+
+                                              SharedPreferences prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+
+                                              // // Testing
+                                              // print(prefs.getString('email'));
+                                              // print(prefs.getString('noHp'));
+                                              // print(prefs.getStringList('nama'));
+                                              // print(prefs.getStringList('gender'));
+                                              // print(prefs.getStringList('status'));
+
+                                              if (prefs.getString('email') ==
+                                                  null) {
+                                                prefs.setString(
+                                                    "email", email.text);
+                                                prefs.setString(
+                                                    'noHp', noHp.text);
+                                                prefs.setStringList(
+                                                    'nama', [name.text]);
+                                                prefs.setStringList(
+                                                    "gender", [character]);
+                                                prefs.setStringList(
+                                                    "status", ["Saya Sendiri"]);
+                                              } else {
+                                                prefs.remove('email');
+                                                prefs.remove('noHp');
+                                                prefs.remove('nama');
+                                                prefs.remove("gender");
+                                                prefs.remove("status");
+
+                                                prefs.setString(
+                                                    "email", email.text);
+                                                prefs.setString(
+                                                    'noHp', noHp.text);
+                                                prefs.setStringList(
+                                                    'nama', [name.text]);
+                                                prefs.setStringList(
+                                                    "gender", [character]);
+                                                prefs.setStringList(
+                                                    "status", ["Saya Sendiri"]);
+                                              }
+
+                                              loading = await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          BookingConfirm(
+                                                              nama: name.text,
+                                                              gender: character,
+                                                              hp: noHp.text,
+                                                              email: email.text,
+                                                              namaDokter:
+                                                                  doctorName,
+                                                              spesialis:
+                                                                  specialist,
+                                                              fotoDokter:
+                                                                  doctorPicture)));
+                                            },
+                                      color: blueTitleDoktor,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(7)),
+                                      child: (loading == false)
+                                          ? Text(
+                                              "Daftar",
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14),
+                                            )
+                                          : SpinKitFadingCircle(
+                                              color: Colors.white,
+                                            )),
                                 )
                               ],
                             )

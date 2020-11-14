@@ -56,7 +56,7 @@ class _CarouselHomeState extends State<CarouselHome> {
                                         return Icon(Icons.error_outline);
                                       },
                                     ),
-                                    color: Colors.green,
+                                    color: Colors.grey[300],
                                   ))
                               .toList(),
                         )),
