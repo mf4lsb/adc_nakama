@@ -22,7 +22,6 @@ class _GantiPasienState extends State<GantiPasien> {
 
   int id = 0;
 
-  int _selectedRadioIndex;
 
   String _selectedDropdownValue = "";
 
@@ -140,7 +139,6 @@ class _GantiPasienState extends State<GantiPasien> {
                                         prefs.setInt("pasienAktif", index);
                                         setState(() {
                                           id = index;
-                                          _selectedRadioIndex = val;
                                         });
                                       },
                                     )
