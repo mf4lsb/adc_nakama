@@ -81,5 +81,7 @@ menampilkan form feedback (Google Form).
 ### Project Task Management
 pada project ini kami menggunakan aplikasi Trello sebagai tools untuk pengaturan management projek sekaligus. berikut ini [linknya](https://trello.com/b/rrRJe04t/project-lomba-smkdev)
 
+### User Acceptance Testing (UAT)
+berikut ini list UAT pada aplikasi ini [linknya](https://docs.google.com/spreadsheets/d/1PPtZQBDLdCzwltffMqKrRbiUDuuT-dASDAy3XG02Wv8/edit?usp=sharing)
 
 
