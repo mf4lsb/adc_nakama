@@ -144,6 +144,9 @@ class MultiPurposeScreen extends StatelessWidget {
     else if(keterangan == "Berita"){
       return keterangan + " - " + "Nakama Company";
     }
+    else if(keterangan == "Lowongan"){
+      return keterangan + " - " + data.namaLowongan;
+    }
     else {
       return "Default Keterangan";
     }
@@ -161,6 +164,9 @@ class MultiPurposeScreen extends StatelessWidget {
     }
     else if(keterangan == "Berita"){
       return data.judul;
+    }
+    else if(keterangan == "Lowongan"){
+      return data.namaLowongan;
     }
     else {
       return "Default Judul";
@@ -180,6 +186,9 @@ class MultiPurposeScreen extends StatelessWidget {
     else if(keterangan == "Berita"){
       return data.registered;
     }
+    else if(keterangan == "Lowongan"){
+      return data.registered;
+    }
     else{
       return "00000 Default Tanggal";
     }
@@ -196,6 +205,9 @@ class MultiPurposeScreen extends StatelessWidget {
       return data.deskripsi;
     } 
     else if(keterangan == "Berita"){
+      return data.deskripsi;
+    }
+    else if(keterangan == "Lowongan"){
       return data.deskripsi;
     }
     else {
