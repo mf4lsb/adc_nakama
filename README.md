@@ -76,9 +76,11 @@ tersedia pada rumah sakit.
 Pada halaman ini peserta hanya menampilkan webview yang nantinya akan
 menampilkan form feedback (Google Form).
 
+
 ## Dokumentasi Project
 
 ### Project Task Management
+![Trello](https://d2k1ftgv7pobq7.cloudfront.net/meta/u/res/images/brand-assets/Logos/0099ec3754bf473d2bbf317204ab6fea/trello-logo-blue.png)
 pada project ini kami menggunakan aplikasi Trello sebagai tools untuk pengaturan management projek sekaligus. berikut ini [linknya](https://trello.com/b/rrRJe04t/project-lomba-smkdev)
 
 ### User Acceptance Testing (UAT)
