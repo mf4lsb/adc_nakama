@@ -5,7 +5,7 @@ Aplikasi cek jadwal praktek dokter, booking jadwal konsul, informasi acara rumah
 
 ## Feature yang tersedia
 
-- Home
+### Home
 Pada halaman Home terdapat image slider atau carousel pada bagian paling atas,
 dimana gambar-gambar yang muncul berupa event dan promo, yang ketika di klik salah
 satu gambarnya akan membuka halaman detail dari event atau promo tersebut.
@@ -24,7 +24,7 @@ contoh, ketika klik alamat email akan berpindah ke aplikasi kirim email dan suda
 bagian email tujuan, atau ketika klik nomor handphone akan berpindah ke aplikasi
 telepon dan sudah terisi bagian nomor tujuan
 
-- Layanan
+### Layanan
 Pada halaman Layanan terdapat search bar yang berguna untuk mencari doktor,
 fasilitas, layanan, event dan promo yang tersedia.
 Di bagian bawahnya terdapat “Fasilitas dan Layanan Terkini” yang berisi daftar semua
@@ -34,7 +34,7 @@ promo.
 Yang dimana ketika salah satu dari item fasilitas dan layanan atau event dan promo
 akan berpindah ke halaman detail tersebut.
 
-- Booking
+### Booking
 Pada halaman Booking terdapat daftar semua dokter yang ada, yang dimana ketika di
 klik salah satunya akan berpindah ke halaman detail dokter.
 Pada halaman detail dokter terdapat beberapa informasi tentang dokter, seperti foto,
@@ -50,7 +50,7 @@ konsultasi dokter, seperti contoh untuk anaknya, suaminya, atau yang lainnya.
 Setelah pengguna mengkonfirmasi booking tersebut, pengguna dapat langsung kembali
 ke halaman Home atau melihat histori booking milik nya.
 
-- Profile
+### Profile
 Pada halaman Profile jika pengguna belum melakukan login maka akan muncul alert
 berbentuk pop up atau bottom sheet untuk mendaftarkan akun terlebih dahulu, seperti
 yang terjadi pada halaman detail dokter ketika klik tombol "Buat Janji".
@@ -62,17 +62,17 @@ maupun akan berlangsung.
 Dan ketika pengguna klik pada salah satu informasi seperti promo, event, atau yang
 lainnya, maka akan pindah ke halaman detail dari notifikasi tersebut.
 
-- Tentang Kami
+### Tentang Kami
 Pada halaman ini terdapat informasi yang berhubungan dengan rumah sakit SMKDEV
 ini, seperti informasi Alamat rumah sakit, informasi nomor layanan darurat dan waktu
 operasional rumah sakit bekerja.
 
-- Partner & Career
+### Partner & Career
 Pada halaman “Partner & Career” fungsi dan alur sama seperti "Halaman Layanan",
 hanya saja halaman ini berisi daftar partner rumah sakit dan info lowongan yang sedang
 tersedia pada rumah sakit.
 
-- Feedback
+### Feedback
 Pada halaman ini peserta hanya menampilkan webview yang nantinya akan
 menampilkan form feedback (Google Form).
 
