@@ -89,4 +89,19 @@ berikut ini list UAT pada aplikasi, ini [linknya](https://docs.google.com/spread
 ### User Flow
 berikut ini alur flow pada aplikasi kita aplikasi, ini [linknya](https://drive.google.com/file/d/1BWpv1d-IRTP7CuMkh8JGWZacmLZpG-0D/view?usp=sharing)
 
+## Cara menjalankannya
+- Pastikan Flutter sudah diinstall, bila belum silahkan ikuti petunjuk [flutter](https://flutter.dev/docs/get-started/install)
+- Pastikan anda sudah menginstall git, bila belum silahkan ikuti petunjuk [git](https://git-scm.com/download/win)
+- clone projek ini
+```sh
+$ git clone https://github.com/mf4lsb/adc_nakama.git
+```
+- bila anda menggunakan Android Studio, silahkan ikuti petujuk [ini](https://flutter.dev/docs/get-started/test-drive?tab=androidstudio)
+- bila anda menggunakan Visual Studio Code, silahkan ikuti petunjuk [ini](https://flutter.dev/docs/get-started/test-drive?tab=vscode)
+- bila menggunakan terminal ikuti langkah berikut
+```sh
+$ cd adc_nakama
+$ flutter devices
+$ flutter run
+```
 
