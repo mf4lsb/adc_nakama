@@ -1,12 +1,12 @@
-# Aplikasi Pemesanan Booking Dokter
+# App Development Challenge  - Aplikasi Rumah Sakit
 ![SMKDEV](https://github.com/mf4lsb/adc_nakama/blob/main/Resorce_Repo/SMKDEV_Logo.png)
 
-Berikut ini merupakan aplikasi cek jadwal praktek dokter, booking jadwal konsul, informasi acara rumah sakit, feedback form, dan lain lain yang ditujukan untuk perlombaan Application Development Challange 1 2020.
+Aplikasi cek jadwal praktek dokter, booking jadwal konsul, informasi acara rumah sakit, feedback form, dan lain lain yang ditujukan untuk perlombaan Application Development Challange 1 2020 menggunakan Flutter.
 
 ## Feature yang tersedia
 
 ### 1.Home
-Pada halaman Home terdapat image slider atau carousel pada bagian paling atas,
+    Pada halaman Home terdapat image slider atau carousel pada bagian paling atas,
 dimana gambar-gambar yang muncul berupa event dan promo, yang ketika di klik salah
 satu gambarnya akan membuka halaman detail dari event atau promo tersebut.
 Dibawahnya terdapat bagian “Temui Kami” yang berisi Maps statis yang memunculkan
@@ -25,7 +25,7 @@ bagian email tujuan, atau ketika klik nomor handphone akan berpindah ke aplikasi
 telepon dan sudah terisi bagian nomor tujuan
 
 ### 2.Layanan
-Pada halaman Layanan terdapat search bar yang berguna untuk mencari doktor,
+    Pada halaman Layanan terdapat search bar yang berguna untuk mencari doktor,
 fasilitas, layanan, event dan promo yang tersedia.
 Di bagian bawahnya terdapat “Fasilitas dan Layanan Terkini” yang berisi daftar semua
 fasilitas dan layanan yang tersedia.
@@ -35,7 +35,7 @@ Yang dimana ketika salah satu dari item fasilitas dan layanan atau event dan pro
 akan berpindah ke halaman detail tersebut.
 
 ### 3.Booking
-Pada halaman Booking terdapat daftar semua dokter yang ada, yang dimana ketika di
+    Pada halaman Booking terdapat daftar semua dokter yang ada, yang dimana ketika di
 klik salah satunya akan berpindah ke halaman detail dokter.
 Pada halaman detail dokter terdapat beberapa informasi tentang dokter, seperti foto,
 jadwal praktek, biografi, kredensial, dan yang lainnya.
@@ -51,7 +51,7 @@ Setelah pengguna mengkonfirmasi booking tersebut, pengguna dapat langsung kembal
 ke halaman Home atau melihat histori booking milik nya.
 
 ### 4.Profile
-Pada halaman Profile jika pengguna belum melakukan login maka akan muncul alert
+    Pada halaman Profile jika pengguna belum melakukan login maka akan muncul alert
 berbentuk pop up atau bottom sheet untuk mendaftarkan akun terlebih dahulu, seperti
 yang terjadi pada halaman detail dokter ketika klik tombol "Buat Janji".
 Jika pengguna sudah terdaftar atau login, akan muncul profil pengguna dan tab untuk
@@ -63,17 +63,17 @@ Dan ketika pengguna klik pada salah satu informasi seperti promo, event, atau ya
 lainnya, maka akan pindah ke halaman detail dari notifikasi tersebut.
 
 ### 5.Tentang Kami
-Pada halaman ini terdapat informasi yang berhubungan dengan rumah sakit SMKDEV
+    Pada halaman ini terdapat informasi yang berhubungan dengan rumah sakit SMKDEV
 ini, seperti informasi Alamat rumah sakit, informasi nomor layanan darurat dan waktu
 operasional rumah sakit bekerja.
 
 ### 6.Partner & Career
-Pada halaman “Partner & Career” fungsi dan alur sama seperti "Halaman Layanan",
+    Pada halaman “Partner & Career” fungsi dan alur sama seperti "Halaman Layanan",
 hanya saja halaman ini berisi daftar partner rumah sakit dan info lowongan yang sedang
 tersedia pada rumah sakit.
 
 ### 7.Feedback
-Pada halaman ini peserta hanya menampilkan webview yang nantinya akan
+    Pada halaman ini peserta hanya menampilkan webview yang nantinya akan
 menampilkan form feedback (Google Form).
 
 
@@ -84,6 +84,9 @@ menampilkan form feedback (Google Form).
 pada project ini kami menggunakan aplikasi Trello sebagai tools untuk pengaturan management projek sekaligus. berikut ini [linknya](https://trello.com/b/rrRJe04t/project-lomba-smkdev)
 
 ### User Acceptance Testing (UAT)
-berikut ini list UAT pada aplikasi ini [linknya](https://docs.google.com/spreadsheets/d/1PPtZQBDLdCzwltffMqKrRbiUDuuT-dASDAy3XG02Wv8/edit?usp=sharing)
+berikut ini list UAT pada aplikasi, ini [linknya](https://docs.google.com/spreadsheets/d/1PPtZQBDLdCzwltffMqKrRbiUDuuT-dASDAy3XG02Wv8/edit?usp=sharing)
+
+### User Flow
+berikut ini alur flow pada aplikasi kita aplikasi, ini [linknya](https://drive.google.com/file/d/1BWpv1d-IRTP7CuMkh8JGWZacmLZpG-0D/view?usp=sharing)
 
 
